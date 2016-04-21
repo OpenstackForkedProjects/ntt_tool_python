@@ -137,6 +137,7 @@ nttApp.controller('TrafficViewCtrl', function($scope, $routeParams, trafficServi
             $scope.endpoints = response;
         });
     };
+    
     $scope.discoverEndpoints = function(){
         $scope.showLoadingEndpoints = true;
         $scope.endpoints = [];
@@ -188,8 +189,7 @@ nttApp.controller('TrafficViewCtrl', function($scope, $routeParams, trafficServi
         });
     };
 
-
-
+    
     $scope.testResult = {};
     $scope.testResultRunning = false;
     $scope.runTrafficTest = function (trafficId) {
