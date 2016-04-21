@@ -27,7 +27,6 @@ from email.mime.text import MIMEText
 from django.conf import settings
 
 
-
 class CloudViewSet(viewsets.ModelViewSet):
     queryset = Cloud.objects.all()
     serializer_class = CloudSerializer
