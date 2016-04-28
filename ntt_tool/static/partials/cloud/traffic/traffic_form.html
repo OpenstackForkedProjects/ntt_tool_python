@@ -1,133 +1,110 @@
-<ng-include src="'/static/partials/common/header.html'"></ng-include>
+<!-- create/update traffic modal -->
+<div class="modal fade" id="trafficFormModal" tabindex="-1" role="dialog" aria-labelledby="trafficFormModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="trafficFormModalLabel">{$ event $} Traffic</h4>
+            </div>
+            <div class="modal-body">
+                <form name="cloudTrafficForm">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Name</label><span> * </span>
+                            <input type="text" class="form-control" id="name" ng-model="traffic.name" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Remote Username</label>
+                            <input type="text" class="form-control" id="remote_user" ng-model="traffic.remote_user" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Remote Password</label>
+                            <input type="password" class="form-control" id="remote_pass" ng-model="traffic.remote_pass" required>
+                        </div>
+                    </div>
 
-<div class="container">
-    <div class="row">
-        <div class="col-md-12">
-            <ol class="breadcrumb">
-                <li><a href="#/cloud/">Cloud List</a></li>
-                <li><a href="#/cloud/view/{$ cloudId $}/">Cloud Details</a></li>
-                <li class="active">Add Traffic</li>
-            </ol>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Allowed Delta Percentage</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="allowed_delta_percentage" ng-model="traffic.allowed_delta_percentage" required aria-describedby="allowed-delta-percentage">
+                                <span class="input-group-addon" id="allowed-delta-percentage">%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>IPERF Duration</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="iperf_duration" ng-model="traffic.iperf_duration" required aria-describedby="iperf-duration">
+                                <span class="input-group-addon" id="iperf-duration">sec</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Number Of Workers</label>
+                            <input type="number" class="form-control" id="number_of_workers" ng-model="traffic.number_of_workers" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Test Result Path</label>
+                            <input type="text" class="form-control" id="test_result_path" ng-model="traffic.test_result_path" required>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Test Method</label>
+                            <br>
+                            <div class="btn-group btn-group-justified">
+                                <label class="btn btn-default" ng-model="traffic.test_method.icmp" uib-btn-checkbox>ICMP</label>
+                                <label class="btn btn-default" ng-model="traffic.test_method.tcp" uib-btn-checkbox>TCP</label>
+                                <label class="btn btn-default" ng-model="traffic.test_method.udp" uib-btn-checkbox>UDP</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Tenant Type</label>
+                            <!-- Todo: Enable when other features are developed -->
+                            <select class="form-control" ng-model="traffic.test_type" ng-disabled="true">
+                                <option value="all">All</option>
+                                <option value="intra-tenant">Intra Tenant</option>
+                                <option value="inter-tenant">Inter Tenant</option>
+                                <option value="south-north">South to North</option>
+                                <option value="north-south">North to South</option>
+                             </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>SSH Gateway</label>
+                            <input type="text" class="form-control" id="ssh_gateway" ng-model="traffic.ssh_gateway" required>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Test Environment</label>
+                            <select class="form-control" ng-model="traffic.test_environment">
+                                <option value="dev">Dev/Testing</option>
+                                <option value="prod">Production</option>
+                             </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary" ng-click="save()">Save</button>
+            </div>
         </div>
     </div>
-
-    <div class="row">
-        <div class="col-md-12">
-            <div class="page-header">
-                <h1>{$ event | capitalize:true $} Traffic</h1>
-            </div>
-        </div>
-    </div>
-    <form name="cloudTrafficForm" ng-submit="save()">
-        <div class="row">
-            <div class="col-md-4">
-                <div class="form-group">
-                    <label>Name</label><span> * </span>
-                    <input type="text" class="form-control" id="name" ng-model="traffic.name" required>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="form-group">
-                    <label>Remote Username</label>
-                    <input type="text" class="form-control" id="remote_user" ng-model="traffic.remote_user" required>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="form-group">
-                    <label>Remote Password</label>
-                    <input type="password" class="form-control" id="remote_pass" ng-model="traffic.remote_pass" required>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="form-group">
-                    <label>Allowed Delta Percentage</label>
-                    <div class="input-group">
-                        <input type="number" class="form-control" id="allowed_delta_percentage" ng-model="traffic.allowed_delta_percentage" required aria-describedby="allowed-delta-percentage">
-                        <span class="input-group-addon" id="allowed-delta-percentage">%</span>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="form-group">
-                    <label>IPERF Duration (In seconds)</label>
-                    <div class="input-group">
-                        <input type="number" class="form-control" id="iperf_duration" ng-model="traffic.iperf_duration" required aria-describedby="iperf-duration">
-                        <span class="input-group-addon" id="iperf-duration">sec</span>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="form-group">
-                    <label>Number Of Workers</label>
-                    <input type="number" class="form-control" id="number_of_workers" ng-model="traffic.number_of_workers" required>
-                </div>
-            </div>
-
-            <div class="col-md-4">
-                <div class="form-group">
-                    <label>Test Result Path</label>
-                    <input type="text" class="form-control" id="test_result_path" ng-model="traffic.test_result_path" required>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="form-group">
-                    <label>Test Method</label>
-                    <br>
-                    <div class="btn-group btn-group-justified">
-                        <label class="btn btn-default" ng-model="traffic.test_method.icmp" uib-btn-checkbox>ICMP</label>
-                        <label class="btn btn-default" ng-model="traffic.test_method.tcp" uib-btn-checkbox>TCP</label>
-                        <label class="btn btn-default" ng-model="traffic.test_method.udp" uib-btn-checkbox>UDP</label>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="form-group">
-                    <label>Tenant Type</label>
-                    <!-- Todo: Enable when other features are developed -->
-                    <select class="form-control" ng-model="traffic.test_type" ng-disabled="true">
-                        <option value="all">All</option>
-                        <option value="intra-tenant">Intra Tenant</option>
-                        <option value="inter-tenant">Inter Tenant</option>
-                        <option value="south-north">South to North</option>
-                        <option value="north-south">North to South</option>
-                     </select>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="form-group">
-                    <label>SSH Gateway</label>
-                    <input type="text" class="form-control" id="ssh_gateway" ng-model="traffic.ssh_gateway" required>
-                </div>
-            </div>
-
-            <!--
-            <div class="col-md-4">
-                <div class="form-group">
-                    <label>External Host</label>
-                    <input type="text" class="form-control" id="external_host" ng-model="traffic.external_host" required>
-                </div>
-            </div>
-            -->
-
-            <div class="col-md-4">
-                <div class="form-group">
-                    <label>Test Environment</label>
-                    <select class="form-control" ng-model="traffic.test_environment">
-                        <option value="dev">Dev/Testing</option>
-                        <option value="prod">Production</option>
-                     </select>
-                </div>
-            </div>
-        </div>
-        <!-- ./row -->
-
-
-        <div class="row">
-            <div class="col-md-12">
-                <a href="#/cloud/view/{$ cloudId $}/" class="btn btn-default">Cancel</a>
-                <button type="submit" class="btn btn-primary">Save</button>
-            </div>
-        </div>
-        <!-- ./row -->
-    </form>
 </div>
+<!-- end: create/update traffic modal -->

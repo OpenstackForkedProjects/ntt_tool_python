@@ -1,6 +1,7 @@
 nttApp.controller('TrafficListCtrl', function($scope, $routeParams, trafficService){
+    $scope.cloudId = $routeParams.id;
     $scope.trafficList = [];
-    trafficService.list($routeParams.id).then(function(response){
+    trafficService.list($scope.cloudId).then(function(response){
         $scope.trafficList = response;
     });
 
@@ -11,35 +12,25 @@ nttApp.controller('TrafficListCtrl', function($scope, $routeParams, trafficServi
             });
         }
     };
-});
 
-
-nttApp.controller('TrafficCtrl', function($scope, $routeParams, $location, trafficService, tenantService){
-    $scope.cloudId = $routeParams.cloudId;
-    $scope.id = $routeParams.id;
-    $scope.event = $scope.id == undefined ? "add" : "edit";
-    $scope.traffic = {
-        "cloud_id": $scope.cloudId,
-        "test_type": "intra-tenant",
-        "test_environment": "dev",
+    $scope.event = "Add";
+    $scope.traffic = {};
+    $scope.createForm = function () {
+        $scope.event = "Add";
+        $scope.traffic = {};
+        $scope.traffic["cloud_id"] = $scope.cloudId;
+        $scope.traffic["test_type"] = "intra-tenant";
+        $scope.traffic["test_environment"] = "dev";
     };
 
-    if ($scope.event == "edit"){
-        trafficService.get($scope.id).then(function(response){
-            $scope.traffic = response;
-            var testMethods = {
-                icmp: false,
-                tcp: false,
-                udp: false
-            };
-            angular.forEach(response.test_method.split(","), function (testMethod, i) {
-                testMethods[testMethod] = true;
-            });
-            $scope.traffic["test_method"] = testMethods;
-        });
-    }
-
-    $scope.save = function(){
+    $scope.updateForm = function ($index) {
+        $scope.event = "Edit";
+        $scope.traffic = {};
+        $scope.traffic = angular.copy($scope.trafficList[$index]);
+        $scope.traffic["$index"] = $index;
+    };
+    
+    $scope.save = function () {
         var selectedTestMethods = [];
         angular.forEach($scope.traffic.test_method, function (isSelected, testMethod) {
             if(isSelected){
@@ -48,176 +39,220 @@ nttApp.controller('TrafficCtrl', function($scope, $routeParams, $location, traff
         });
         $scope.traffic["test_method"] = selectedTestMethods.join();
 
-        if($scope.event == "add") {
+        if($scope.event == "Add") {
             trafficService.create($scope.traffic).then(function (response) {
-                $location.path("cloud/traffic/view/" + $scope.cloudId + "/" + response.id + "/");
+                $scope.trafficList.push(response);
+                $("#trafficFormModal").modal('hide');
             });
         }
         else {
             trafficService.update($scope.traffic.id, $scope.traffic).then(function(response){
-                $location.path("cloud/traffic/view/" + $scope.cloudId + "/" + $scope.traffic.id + "/");
+                $scope.trafficList[$scope.traffic.$index] = response;
+                $("#trafficFormModal").modal('hide');
             });
         }
-    };
+    }
 });
 
-
-nttApp.controller('TrafficViewCtrl', function($scope, $routeParams, trafficService, tenantService){
+nttApp.controller('TrafficViewCtrl', function($scope, $routeParams, trafficService, tenantService, networkService, endpointService){
     $scope.cloudId = $routeParams.cloudId;
     $scope.id = $routeParams.id;
     $scope.traffic = {};
 
-    trafficService.getWithRelatedData($scope.id).then(function(response){
+    trafficService.get($scope.id).then(function(response){
         $scope.traffic = response;
         $scope.getTenants();
-        $scope.getEndpoints();
+        $scope.getReports();
     });
 
-    $scope.isAnyNetworkSelected = false;
     $scope.tenants = [];
-    $scope.getTenants = function(){
-        tenantService.list($scope.cloudId).then(function(response){
+    $scope.selectedTenant = {};
+    $scope.showTenantsLoading = false;
+    $scope.getTenants = function () {
+        $scope.showTenantsLoading = true;
+        tenantService.list($scope.id).then(function (response) {
+            $scope.showTenantsLoading = false;
             $scope.tenants = response;
-            // Iterating through tenants to make radio button checked for matching tenant
-            angular.forEach(response, function(tenant, i){
-                if ($scope.traffic.tenants[0].tenant_id == tenant.tenant_id){
-                    $scope.traffic.tenants[0] = tenant;
-                    angular.forEach($scope.traffic.tenants[0].networks, function(network, j){
-                        angular.forEach($scope.traffic.selected_networks, function(selectedNetwork, k){
-                            if(selectedNetwork.network == network.id){
-                                network["is_selected"] = true;
-                                if($scope.traffic.test_environment == 'prod'){
-                                    network["endpoint_count"] = selectedNetwork.endpoint_count;
-                                }
-                                else{
-                                    network.subnets[0]["ip_range_start"] = selectedNetwork.ip_range_start;
-                                    network.subnets[0]["ip_range_end"] = selectedNetwork.ip_range_end;    
-                                }
-                                $scope.isAnyNetworkSelected = true;
-                            }
-                        });
-                    });
+            angular.forEach($scope.tenants, function (tenant, i) {
+                if(tenant.is_selected){
+                    $scope.selectedTenant = tenant;
                 }
             });
+            $scope.getNetworks($scope.selectedTenant.id);
+        });
+    };
+    
+    $scope.showTenantsDiscovering = false;
+    $scope.discoverTenants = function () {
+        $scope.showTenantsDiscovering = true;
+        tenantService.discover({"cloud_id": $scope.cloudId, "traffic_id":$scope.id}).then(function (response) {
+            $scope.showTenantsDiscovering = false;
+            $scope.tenants = response;
         });
     };
 
-    $scope.selectTenant = function(tenant_id){
-        trafficService.selectTenant($scope.traffic.id, tenant_id).then(function(response){
-            console.log(response)
+
+    $scope.networks = [];
+    $scope.showNetworkDiscovering = false;
+    $scope.discoverNetworks = function ($index) {
+        $scope.showNetworkDiscovering = true;
+        $scope.selectedTenant = $scope.tenants[$index];
+        networkService.discover($scope.selectedTenant.id).then(function (response) {
+            $scope.networks = response;
+            $scope.showNetworkDiscovering = false;
         });
     };
 
-    $scope.selectNetwork = function($index, networkId, isSelected){
-        var params = {
-            "network_id": networkId,
-            "is_selected": isSelected,
-        };
-        trafficService.selectNetwork($scope.traffic.id, params).then(function(response){
-            if(isSelected){
-                $scope.traffic.tenants[0].networks[$index].subnets[0] = response;
-            }
-        });
+    $scope.getNetworks = function (tenantId) {
+        if(tenantId != undefined) {
+            networkService.list(tenantId).then(function (response) {
+                $scope.networks = response;
+                $scope.getEndpoints();
+            });
+        }
     };
 
-    $scope.$watch('traffic.tenants[0].networks', function(newValues, oldValue, scope){
+    
+    $scope.enabledEndpointActionBtn = false;
+    $scope.$watch('networks', function(newValues, oldValue, scope){
         var flag = false;
         angular.forEach(newValues, function(network, i){
             if(network.is_selected){
                 flag = true
             }
         });
-        $scope.isAnyNetworkSelected = flag;
+        $scope.enabledEndpointActionBtn = flag;
     }, true);
 
-    $scope.showLoadingEndpoints = false;
+
     $scope.endpoints = [];
+    $scope.showEndpointLoading = false;
+    $scope.discoverEndpoints = function () {
+        $scope.showEndpointLoading = true;
+        var selectedNetworks = [];
+        angular.forEach($scope.networks, function(network, i) {
+            if(network.is_selected){
+                selectedNetworks.push({
+                    "network_id": network.id,
+                    "ip_range_start": network.subnets[0].ip_range_start,
+                    "ip_range_end": network.subnets[0].ip_range_end,
+                });
+            }
+        });
+        endpointService.discover($scope.traffic.id, selectedNetworks).then(function (response) {
+            $scope.endpoints = response;
+            $scope.showEndpointLoading = false;
+        });
+    };
+
+    $scope.showEndpointLaunching = false;
+    $scope.launchEndpoints = function () {
+        $scope.showEndpointLaunching = true;
+        var selectedNetworks = [];
+        angular.forEach($scope.networks, function(network, i) {
+            if(network.is_selected){
+                selectedNetworks.push({
+                    "network_id": network.id,
+                    "endpoint_ctrafficTestReportsount": network.endpoint_count
+                });
+            }
+        });
+        endpointService.launch($scope.traffic.id, selectedNetworks).then(function (response) {
+            $scope.endpoints = response;
+            $scope.showEndpointLaunching = false;
+        });
+    };
+
     $scope.getEndpoints = function () {
-        trafficService.endpoints($scope.traffic.id).then(function(response){
+        endpointService.list($scope.traffic.id).then(function (response) {
             $scope.endpoints = response;
         });
     };
-    
-    $scope.discoverEndpoints = function(){
-        $scope.showLoadingEndpoints = true;
-        $scope.endpoints = [];
-        var selectedItems = [];
-        
-        angular.forEach($scope.traffic.tenants[0].networks, function(network, i){
-            console.log(network.is_selected)
-            if(network.is_selected){
-                if($scope.traffic.test_environment == 'prod'){
-                    selectedItems.push({
-                        "network_id": network.id,
-                        "endpoint_count": network.endpoint_count
-                    })
-                }
-                else {
-                    selectedItems.push({
-                        "network_id": network.id,
-                        "ip_range_start": network.subnets[0].ip_range_start,
-                        "ip_range_end": network.subnets[0].ip_range_end,
-                    });
-                }
+
+    $scope.selectEndpoint = function ($index, id, isSelected) {
+        var endpoint = $scope.endpoints[$index];
+        endpointService.select(id, isSelected).then(function (response) {
+            endpoint = response;
+        });
+    };
+
+    $scope.selectedEndpointsCount = 0;
+    $scope.$watch('endpoints', function(newValues, oldValue, scope){
+        var count = 0;
+        angular.forEach(newValues, function(endpoint, i){
+            if(endpoint.is_selected){
+                count++;
             }
         });
+        $scope.selectedEndpointsCount = count;
+    }, true);
 
-        if($scope.traffic.test_environment == "dev") {
-            trafficService.discoverEndpoints($scope.traffic.id, selectedItems).then(function (response) {
-                $scope.endpoints = response;
-                $scope.showLoadingEndpoints = false;
-        
-            });
-        }
-        else {
-            trafficService.launchEndpoints($scope.traffic.id, selectedItems).then(function (response) {
-                $scope.endpoints = response;
-                $scope.showLoadingEndpoints = false;
-            });
-        }
-    };
 
-    $scope.selectEndpoint = function($index) {
-        var endpoint = $scope.endpoints[$index];
-        var params = {
-            "endpoint_pk": endpoint.id,
-            "endpoint_id": endpoint.endpoint_id,
-            "is_selected": endpoint.is_selected
-        };
-        trafficService.selectEndpoint($scope.traffic.id, params).then(function (response) {
-            $scope.endpoints[$index] = response;
+    $scope.reports = [];
+    $scope.getReports = function () {
+        trafficService.reports($scope.traffic.id).then(function (response) {
+            $scope.reports = response;
         });
     };
-
     
-    $scope.testResult = {};
-    $scope.testResultRunning = false;
-    $scope.runTrafficTest = function (trafficId) {
-        $scope.testResultRunning = true;
-        trafficService.runTrafficTest(trafficId).then(function (response) {
-            $scope.testResult = response;
-            $scope.testResultRunning = false;
+    $scope.report = {};
+    $scope.trafficTestDuration = "1";
+    $scope.trafficTestRunning = false;
+    $scope.runTrafficTest = function () {
+        $scope.report = {};
+        $scope.trafficTestRunning = true;
+        trafficService.runTrafficTest($scope.traffic.id, $scope.trafficTestDuration).then(function (response) {
+            $scope.report = response;
+            $scope.trafficTestRunning = false;
+            $scope.reports.push($scope.report);
+            $('#trafficTestFormModal').modal('hide');
+            $('#viewReportModal').modal('show');
         });
     };
 
-    var doc = new jsPDF();
-    var specialElementHandlers = {
-        '#editor': function (element, renderer) {
-            return true;
-        }
-    };
-    $scope.exportTrafficTestResults = function () {
-        doc.fromHTML($('#traffic-test-results').html(), 10, 10, {
-            'width': 200,
-            'elementHandlers': specialElementHandlers
+    $scope.showLoadingReport = false;
+    $scope.viewReport = function (testRunId) {
+        $scope.report = {};
+        $scope.showLoadingReport = true;
+        trafficService.report(testRunId).then(function (response) {
+            $scope.report = response;
+            $scope.showLoadingReport = false;
         });
-        doc.save('traffic-test-report.pdf');
     };
     
     
-    $scope.emailReport = function () {
-        trafficService.emailReport($scope.traffic.id).then(function (response) {
-            console.log(response)
-        });
-    }
+    $scope.isEmpty = function (obj) {
+        for (var i in obj) if (obj.hasOwnProperty(i)) return false;
+        return true;
+    };
+    // $scope.testResult = {};
+    // $scope.testResultRunning = false;
+    // $scope.runTrafficTest = function (trafficId) {
+    //     $scope.testResultRunning = true;
+    //     trafficService.runTrafficTest(trafficId).then(function (response) {
+    //         $scope.testResult = response;
+    //         $scope.testResultRunning = false;
+    //     });
+    // };
+    //
+    // var doc = new jsPDF();
+    // var specialElementHandlers = {
+    //     '#editor': function (element, renderer) {
+    //         return true;
+    //     }
+    // };
+    // $scope.exportTrafficTestResults = function () {
+    //     doc.fromHTML($('#traffic-test-results').html(), 10, 10, {
+    //         'width': 200,
+    //         'elementHandlers': specialElementHandlers
+    //     });
+    //     doc.save('traffic-test-report.pdf');
+    // };
+    //
+    //
+    // $scope.emailReport = function () {
+    //     trafficService.emailReport($scope.traffic.id).then(function (response) {
+    //         console.log(response)
+    //     });
+    // }
 });

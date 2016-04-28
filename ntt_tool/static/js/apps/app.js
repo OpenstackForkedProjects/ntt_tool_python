@@ -57,22 +57,12 @@ nttApp.config(['$routeProvider', function($routeProvider){
     /**
      * URL patterns for cloud traffic
      */
-    $routeProvider.when('/cloud/traffic/add/:cloudId/', {
-        controller: 'TrafficCtrl',
-        templateUrl: '/static/partials/cloud/traffic/traffic_form.html'
-    });
 
-    $routeProvider.when('/cloud/traffic/edit/:cloudId/:id/', {
-        controller: 'TrafficCtrl',
-        templateUrl: '/static/partials/cloud/traffic/traffic_form.html'
-    });
-
-    $routeProvider.when('/cloud/traffic/view/:cloudId/:id/', {
+    $routeProvider.when('/cloud/:cloudId/traffic/:id/', {
         controller: 'TrafficViewCtrl',
         templateUrl: '/static/partials/cloud/traffic/traffic_view.html'
     });
 }]);
-
 
 
 

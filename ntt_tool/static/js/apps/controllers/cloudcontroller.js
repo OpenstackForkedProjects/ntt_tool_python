@@ -41,62 +41,7 @@ nttApp.controller('CloudCtrl', function($scope, $routeParams, $location, cloudSe
             });
         }
     };
-
-    //$scope.saveAndDiscover = function(){
-    //    if ($scope.event == "add") {
-    //        cloudService.create($scope.cloud).then(function(response){
-    //            $location.path("cloud/view/" + response.id + "/").search('discover', 'true');
-    //        });
-    //    }
-    //    else {
-    //        cloudService.update($scope.cloud.id, $scope.cloud).then(function(response){
-    //            $location.path("cloud/view/" + response.id + "/").search('discover', 'true');
-    //        });
-    //    }
-    //}
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -198,24 +143,3 @@ nttApp.controller('CloudTrafficTestCtrl', function($scope, $location, cloudTraff
 
 });
 
-//nttApp.controller('CloudTrafficTenantsCtrl', function ($scope, $routeParams, $location, CloudTrafficTenantService) {
-//    $scope.trafficId = $routeParams.trafficId;
-//    $scope.tenants = {};
-//
-//    $scope.save = function(){
-//        $scope.tenants["cloud_traffic"] = $scope.trafficId;
-//        CloudTrafficTenantService.save($scope.tenants).then(function (data) {
-//            $location.path("cloudtraffictenants/sshgateway/"+ data.id +"/");
-//        });
-//    };
-//});
-//
-//
-//nttApp.controller('cloudTrafficTenantsSSHGatewayCtrl', function($scope, $routeParams, $location){
-//    $scope.trafficId = $routeParams.trafficId;
-//    $scope.tenants = {};
-//
-//    CloudTrafficTenantService.list($scope.trafficId).then(function(data){
-//        $scope.tenants = data;
-//    });
-//});

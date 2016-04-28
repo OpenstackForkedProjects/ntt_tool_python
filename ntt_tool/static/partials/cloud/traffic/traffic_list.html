@@ -1,36 +1,48 @@
 <div class="page-header">
-    <a href="#/cloud/traffic/add/{$ cloud.id $}/" class="btn btn-primary btn-sm pull-right">
-        <i class="fa fa-plus-circle fa-fw"></i> Add Traffic
-    </a>
-    <h1>Traffic</h1>
+    <button type="button" class="btn btn-primary btn-sm pull-right" data-toggle="modal" data-target="#trafficFormModal" ng-click="createForm()"> <i class="fa fa-plus-circle fa-fw"></i> Add Traffic </button>
+    <h1>Traffic(s)</h1>
 </div>
 
-<div class="list-group" ng-show="trafficList.length > 0">
-    <div class="list-group-item" ng-repeat="cloudTraffic in trafficList">
-        <div class="row">
-            <div class="col-md-5">
-                <div>Allowed delta percentage : {$ cloudTraffic.allowed_delta_percentage $} %</div>
-                <div># Workers : {$ cloudTraffic.number_of_workers $}</div>
-                <div>IPERF duration : {$ cloudTraffic.iperf_duration $} sec</div>
-            </div>
-            <div class="col-md-5">
-                <div>Test result path : {$ cloudTraffic.test_result_path $}</div>
-                <div>Test Methods : <span class="label label-info">{$ cloudTraffic.test_method $}</span></div>
-                <div>Test Type : {$ cloudTraffic.test_type $}</div>
-            </div>
-            <div class="col-md-2">
-                <b><a href="#/cloud/traffic/view/{$ cloud.id $}/{$ cloudTraffic.id $}/">{$ cloudTraffic.name | limitTo: 20 $}</a></b>
-                <div>&nbsp;</div>
-                <div class="pull-right">
-                    <a href="#/cloud/traffic/edit/{$ cloud.id $}/{$ cloudTraffic.id $}/" class="text-info"><i class="fa fa-edit fa-fw"></i></a>
-                    <a href class="text-danger" ng-click="delete($index)"><i class="fa fa-trash-o fa-fw"></i></a></span>
-                </div>
-            </div>
-        </div>
-        <!-- ./row -->
-    </div>
-    <!-- ./list-group-item -->
-</div>
-<!-- ./list-group -->
+<table class="table table-bordered bg-white" ng-show="trafficList.length > 0">
+    <tr>
+        <th class="col-md-2">Name</th>
+        <th class="col-md-1">Test Environment</th>
+        <th class="col-md-1">Test Type</th>
+        <th class="col-md-2">Test Methods</th>
+        <th class="col-md-1">IPERF Duration</th>
+        <th class="col-md-1"># Workers</th>
+        <th class="col-md-1">Allowed Delta %</th>
+        <th class="col-md-1">Test Result Path</th>
+        <th class="col-md-1">Actions</th>
+    </tr>
+    <tr ng-repeat="cloudTraffic in trafficList">
+        <td><a href="#/cloud/{$ cloud.id $}/traffic/{$ cloudTraffic.id $}/" class="text-primary">{$ cloudTraffic.name | limitTo: 20 $}</a></td>
+        <td>{$ cloudTraffic.test_environment $}</td>
+        <td>{$ cloudTraffic.test_type $}</td>
+        <td>
+            <span class="label label-info" ng-if="cloudTraffic.test_method.tcp">TCP</span>
+            <span class="label label-info" ng-if="cloudTraffic.test_method.udp">UDP</span>
+            <span class="label label-info" ng-if="cloudTraffic.test_method.icmp">ICMP</span>
+        </td>
+        <td>{$ cloudTraffic.iperf_duration $} sec</td>
+        <td>{$ cloudTraffic.number_of_workers $}</td>
+        <td>{$ cloudTraffic.allowed_delta_percentage $} %</td>
+        <td>{$ cloudTraffic.test_result_path $}</td>
+        <td class="text-center">
+            <a href class="text-info" data-toggle="modal" data-target="#trafficFormModal" ng-click="updateForm($index)"> <i class="fa fa-edit fa-fw"></i> </a>
+            <a href class="text-danger" ng-click="delete($index)"><i class="fa fa-trash-o fa-fw"></i></a></span>
+        </td>
+    </tr>
+</table>
 
-<p ng-hide="trafficList.length > 0">No traffic(s).</p>
+<p ng-hide="trafficList.length > 0">No data found.</p>
+
+
+<ng-include src="'/static/partials/cloud/traffic/traffic_form.html'"></ng-include>
+
+
+
+
+
+
+

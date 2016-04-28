@@ -6,49 +6,29 @@ nttApp.service('trafficService', function(dataService){
     this.get = function(pk) {
         return dataService.get('/api/traffic/' + pk + '/');
     };
-
-    this.getWithRelatedData = function(pk) {
-        return dataService.get('/api/traffic/' + pk + '/?get_related_data=true');
-    };
     
     this.create = function(params){
         return dataService.post('/api/traffic/', params);
     };
 
     this.update = function(pk, params){
-        return dataService.put('/api/traffic/'+pk+'/', params);
+        return dataService.put('/api/traffic/' + pk + '/', params);
     };
 
     this.delete = function(pk){
-        return dataService.delete('/api/traffic/'+pk+'/');
+        return dataService.delete('/api/traffic/' + pk + '/');
     };
 
-    this.selectTenant = function(pk, tenantId){
-        return dataService.get('/api/traffic/' + pk + '/select/tenant/' + tenantId + '/');
+    this.reports = function (pk) {
+        return dataService.get('/api/traffic/reports/' + pk + '/');
     };
 
-    this.selectNetwork = function(pk, params){
-        return dataService.get('/api/traffic/' + pk + '/select/network/?'+$.param(params));
+    this.report = function (testRunId) {
+        return dataService.get('/api/traffic/report/' + testRunId + '/');
     };
-
-    this.endpoints = function(pk){
-        return dataService.get('/api/traffic/' + pk + '/endpoints/');
-    };
-
-    this.discoverEndpoints = function(pk, params){
-        return dataService.postJSON('/api/traffic/' +pk + '/endpoints/discover/', params);
-    };
-1
-    this.launchEndpoints = function(pk, params) {
-        return dataService.postJSON('/api/traffic/' +pk + '/endpoints/launch/', params);
-    };
-
-    this.selectEndpoint = function (pk, params) {
-        return dataService.get('/api/traffic/' +pk + '/endpoints/select/?'+$.param(params));
-    };
-
-    this.runTrafficTest = function(pk){
-        return dataService.get('/api/traffic/' + pk + '/run/test/');
+    
+    this.runTrafficTest = function(pk, testDuration){
+        return dataService.get('/api/traffic/' + pk + '/run/test/?duration='+testDuration);
     };
     
     this.emailReport = function (pk) {

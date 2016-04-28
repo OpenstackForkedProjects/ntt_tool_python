@@ -54,6 +54,7 @@ class NovaClientUtils(OpenStackClientUtils):
                 "tenant_name": self.credentials.get("project_id")
             }
             keystone = KeystoneClientUtils(**keystone_credentials)
+            # ToDo: GLANCE_ENDPOINT is hardcoded. Image will not upload if we select diff network
             glance = GlanceClientUtils(endpoint=GLANCE_ENDPOINT,
                                        token=keystone.get_token())
             image = glance.upload_image()

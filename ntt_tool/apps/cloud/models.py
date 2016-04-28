@@ -1,7 +1,6 @@
 from __future__ import unicode_literals
 from django.contrib.auth.models import User
 from django.db import models
-from django.utils import timezone
 
 
 class Cloud(models.Model):
@@ -15,67 +14,7 @@ class Cloud(models.Model):
     updated_on = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        db_table = "cloud_details"
-
-
-class Tenant(models.Model):
-    cloud = models.ForeignKey(Cloud, blank=True, null=True, related_name="tenants")
-    tenant_id = models.CharField(max_length=100)
-    tenant_name = models.CharField(max_length=256)
-    description = models.CharField(max_length=256, blank=True, null=True)
-    enabled = models.BooleanField(default=False)
-    is_dirty = models.BooleanField(default=False)
-    creator = models.ForeignKey(User, blank=True, null=True)
-    created_on = models.DateTimeField(auto_now=True)
-    updated_on = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        db_table = "cloud_tenants"
-
-
-class Network(models.Model):
-    tenant = models.ForeignKey(Tenant, related_name="networks")
-    network_id = models.CharField(max_length=255)
-    network_name = models.CharField(max_length=255)
-    shared = models.BooleanField(default=False)
-    status = models.CharField(max_length=25)
-    is_dirty = models.BooleanField(default=False)
-    creator = models.ForeignKey(User, blank=True, null=True)
-    created_on = models.DateTimeField(auto_now=True)
-    updated_on = models.DateTimeField(auto_now_add=True)
-
-    def __unicode__(self):
-        return "%s | %s | Tenant:%s" % (self.id, self.network_name, self.tenant.tenant_name)
-
-    class Meta:
-        db_table = "cloud_tenant_networks"
-
-
-class Subnet(models.Model):
-    network = models.ForeignKey(Network, related_name="subnets")
-    subnet_id = models.CharField(max_length=255)
-    subnet_name = models.CharField(max_length=255)
-    cidr = models.CharField(max_length=255)
-    allocation_pool_start = models.GenericIPAddressField(blank=True, null=True)
-    allocation_pool_end = models.GenericIPAddressField(blank=True, null=True)
-    is_dirty = models.BooleanField(default=False)
-
-    class Meta:
-        db_table = "cloud_tenant_network_subnets"
-
-
-class Router(models.Model):
-    tenant = models.ForeignKey(Tenant, related_name="routers")
-    router_id = models.CharField(max_length=255)
-    router_name = models.CharField(max_length=255)
-    status = models.CharField(max_length=25)
-    is_dirty = models.BooleanField(default=False)
-    creator = models.ForeignKey(User, blank=True, null=True)
-    created_on = models.DateTimeField(auto_now=True)
-    updated_on = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        db_table = "cloud_tenant_routers"
+        db_table = "clouds"
 
 
 class Traffic(models.Model):
@@ -92,7 +31,7 @@ class Traffic(models.Model):
         ('prod', 'Production'),
     )
 
-    cloud = models.ForeignKey(Cloud, blank=True, null=True, related_name="cloud_traffic")
+    cloud = models.ForeignKey(Cloud, blank=True, null=True, related_name="traffics")
     name = models.CharField(max_length=256)
     allowed_delta_percentage = models.FloatField()
     test_result_path = models.CharField(max_length=250)
@@ -102,8 +41,6 @@ class Traffic(models.Model):
     test_method = models.CharField(max_length=100)
     iperf_duration = models.IntegerField()
     test_type = models.CharField(max_length=20, choices=TYPE_CHOICES, default='all')
-    tenants = models.ManyToManyField(Tenant, blank=True)
-    selected_networks = models.ManyToManyField(Network, blank=True, through='TrafficNetworksMap', related_name="selected_networks")
     external_host = models.CharField(max_length=100, blank=True, null=True)
     ssh_gateway = models.CharField(max_length=100, blank=True, null=True)
     test_environment = models.CharField(max_length=20, choices=TEST_ENVIRONMENT_CHOICES, default='dev')
@@ -112,21 +49,64 @@ class Traffic(models.Model):
     updated_on = models.DateTimeField(auto_now_add=True)
 
     def __unicode__(self):
-        return "%s | %s | Cloud:%s" % (self.id, self.name, self.cloud.name)
+        return "%s | %s | cloud:%s" % (self.id, self.name, self.cloud.name)
 
     class Meta:
-        db_table = "cloud_traffic"
+        db_table = "traffics"
 
 
-class TrafficNetworksMap(models.Model):
-    traffic = models.ForeignKey(Traffic, on_delete=models.CASCADE)
-    network = models.ForeignKey(Network, on_delete=models.CASCADE)
+class Tenant(models.Model):
+    traffic = models.ForeignKey(Traffic, blank=True, null=True, related_name="tenants")
+    tenant_id = models.CharField(max_length=100)
+    tenant_name = models.CharField(max_length=256)
+    description = models.CharField(max_length=256, blank=True, null=True)
+    enabled = models.BooleanField(default=False)
+    is_selected = models.BooleanField(default=False)
+    is_dirty = models.BooleanField(default=False)
+    creator = models.ForeignKey(User, blank=True, null=True)
+    created_on = models.DateTimeField(auto_now=True)
+    updated_on = models.DateTimeField(auto_now_add=True)
+
+    def __unicode__(self):
+        return "%s | %s | traffic:%s" % (self.id, self.tenant_name, self.traffic.name)
+
+    class Meta:
+        db_table = "tenants"
+
+
+class Network(models.Model):
+    tenant = models.ForeignKey(Tenant, related_name="networks")
+    network_id = models.CharField(max_length=255)
+    network_name = models.CharField(max_length=255)
+    shared = models.BooleanField(default=False)
+    status = models.CharField(max_length=25)
+    is_selected = models.BooleanField(default=False)
+    endpoint_count = models.IntegerField(default=True, null=True)
+    is_dirty = models.BooleanField(default=False)
+    creator = models.ForeignKey(User, blank=True, null=True)
+    created_on = models.DateTimeField(auto_now=True)
+    updated_on = models.DateTimeField(auto_now_add=True)
+
+    def __unicode__(self):
+        return "%s | %s | tenant:%s" % (self.id, self.network_name, self.tenant.tenant_name)
+
+    class Meta:
+        db_table = "networks"
+
+
+class Subnet(models.Model):
+    network = models.ForeignKey(Network, related_name="subnets")
+    subnet_id = models.CharField(max_length=255)
+    subnet_name = models.CharField(max_length=255)
+    cidr = models.CharField(max_length=255)
+    allocation_pool_start = models.GenericIPAddressField(blank=True, null=True)
     ip_range_start = models.TextField(max_length=15, blank=True, null=True)
     ip_range_end = models.TextField(max_length=15, blank=True, null=True)
-    endpoint_count = models.IntegerField(blank=True, null=True)
+    allocation_pool_end = models.GenericIPAddressField(blank=True, null=True)
+    is_dirty = models.BooleanField(default=False)
 
     class Meta:
-        db_table = "cloud_traffic_networks_map"
+        db_table = "subnets"
 
 
 class Endpoint(models.Model):
@@ -140,9 +120,87 @@ class Endpoint(models.Model):
     is_dirty = models.BooleanField(default=False)
 
     class Meta:
-        db_table = "cloud_traffic_endpoints"
+        db_table = "endpoints"
 
 
-class TrafficTest(models.Model):
+class TestRun(models.Model):
+    TRAFFIC_TEST_RUN_STATUS = (
+        ('queued', 'Queued'),
+        ('inprogress', 'In Progress'),
+        ('completed', 'Completed'),
+        ('stopped', 'Stopped'),
+        ('error', 'Error'),
+    )
     traffic = models.ForeignKey(Traffic)
-    started_on = models.DateTimeField()
+    test_run_duration = models.IntegerField(default=1)
+    started_on = models.DateTimeField(auto_now=True)
+    started_by = models.ForeignKey(User)
+    status = models.CharField(max_length=20, choices=TRAFFIC_TEST_RUN_STATUS, default='queued')
+
+    def __unicode__(self):
+        return "%s | %s" % (self.id, self.traffic.name)
+
+    class Meta:
+        db_table = "traffic_test_run"
+
+
+class UDPTestResults(models.Model):
+    traffic_test_run = models.ForeignKey(TestRun, related_name="udp_test_results")
+    src_tenant = models.CharField(max_length=500)
+    dest_tenant = models.CharField(max_length=500)
+    src_ep = models.TextField()
+    dest_ep = models.TextField()
+    status = models.CharField(max_length=20)
+    jitter = models.CharField(max_length=20)
+    bandwidth = models.CharField(max_length=20)
+    bandwidth_loss_percent = models.CharField(max_length=20)
+    interval_time = models.CharField(max_length=20)
+    transferred = models.CharField(max_length=20)
+    loss_datagram = models.IntegerField()
+    total_datagram = models.IntegerField()
+
+    def __unicode__(self):
+        return "%s | TestRun: %s" % (self.id, self.traffic_test_run.id)
+
+    class Meta:
+        db_table = "udp_test_results"
+
+
+class ICMPTestResults(models.Model):
+    traffic_test_run = models.ForeignKey(TestRun, related_name="icmp_test_results")
+    src_tenant = models.CharField(max_length=500)
+    dest_tenant = models.CharField(max_length=500)
+    src_ep = models.TextField()
+    dest_ep = models.TextField()
+    status = models.CharField(max_length=20)
+    rtt_min = models.FloatField()
+    rtt_max = models.FloatField()
+    rtt_avg = models.FloatField()
+    packets_received = models.IntegerField()
+    packets_transmitted = models.IntegerField()
+    packet_loss_percent = models.FloatField()
+
+    def __unicode__(self):
+        return "%s | TestRun: %s" % (self.id, self.traffic_test_run.id)
+
+    class Meta:
+        db_table = "icmp_test_results"
+
+
+class TCPTestResults(models.Model):
+    traffic_test_run = models.ForeignKey(TestRun, related_name="tcp_test_results")
+    src_tenant = models.CharField(max_length=500)
+    dest_tenant = models.CharField(max_length=500)
+    src_ep = models.TextField()
+    dest_ep = models.TextField()
+    status = models.CharField(max_length=20)
+    retr = models.IntegerField()
+    bandwidth = models.CharField(max_length=20)
+    interval_time = models.CharField(max_length=20)
+    transferred = models.CharField(max_length=20)
+
+    def __unicode__(self):
+        return "%s | TestRun: %s" % (self.id, self.traffic_test_run.id)
+
+    class Meta:
+        db_table = "tcp_test_results"

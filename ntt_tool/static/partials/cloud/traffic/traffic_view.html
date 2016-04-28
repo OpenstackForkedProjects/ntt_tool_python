@@ -15,7 +15,6 @@
         <div class="col-md-12">
             <div class="page-header">
                 <h1>Traffic Details</h1>
-                <a href="#/cloud/traffic/edit/{$ cloudId $}/{$ id $}/" class="btn btn-primary btn-sm pull-right"><i class="fa fa-edit fa-fw"></i> Edit</a>
             </div>
             <table class="table bg-white border">
                 <tr>
@@ -31,10 +30,6 @@
                     <td class="text-info col-md-3">{$ traffic.number_of_workers $}</td>
                 </tr>
                 <tr>
-                    <!--
-                    <td class="text-right col-md-3">External host : </td>
-                    <td class="text-info col-md-3">{$ traffic.external_host $}</td>
-                    -->
                     <td class="text-right col-md-3">Test environment :  </td>
                     <td class="text-info col-md-3">{$ traffic.test_environment $}</td>
                     <td class="text-right col-md-3">IPERF duration :  </td>
@@ -49,155 +44,379 @@
                 <tr>
                     <td class="text-right col-md-3">Test result path :  </td>
                     <td class="text-info col-md-3">{$ traffic.test_result_path $}</td>
-                    <td class="text-right col-md-3">Test Method :  </td>
-                    <td class="text-info col-md-3">{$ traffic.test_method $}</td>
+                    <td class="text-right col-md-3">Test Methods :  </td>
+                    <td class="text-info col-md-3">
+                        <span class="label label-info" ng-if="traffic.test_method.tcp">TCP</span>
+                        <span class="label label-info" ng-if="traffic.test_method.udp">UDP</span>
+                        <span class="label label-info" ng-if="traffic.test_method.icmp">ICMP</span>
+                    </td>
                 </tr>
             </table>
         </div>
     </div>
     <!-- end: traffic details -->
 
+
     <div class="row">
         <div class="col-md-12">
             <div class="page-header">
-                <h1>Select Tenants & Networks</h1>
+                <h1>Tenants & Networks</h1>
             </div>
 
-            <!-- Test type : Intra tenant -->
-            <div ng-show="traffic.test_type == 'intra-tenant'">
-                <ng-include src="'/static/partials/cloud/traffic/traffic_view_tenants_test_env.html'"></ng-include>
-                <ng-include src="'/static/partials/cloud/traffic/traffic_view_tenants_prod_env.html'"></ng-include>
-            </div>
-            <!-- end: Test type : Intra tenant -->
-        </div>
-        <!-- ./col-md-12 -->
-    </div>
-    <!-- /row -->
-
-    <!-- traffic test panel -->
-    <div class="row" ng-show="(endpoints | filter: { is_selected: true }).length >= 2">
-        <div class="col-md-12">
-
-            <div>
-                <div class="page-header">
-                    <button type="button" ng-click="runTrafficTest(traffic.id)" class="btn btn-danger btn-sm pull-right">Run Traffic Test</button>
-                    <h1>Traffic Test</h1>
-                </div>
-            </div>
-
-
-            <div ng-show="testResultRunning">
-                Traffic test in progress <span class="pull-right">Please wait...</span>
+            <div ng-show="showTenantsLoading">
+                Loading tenants <span class="pull-right">Please wait...</span>
                 <div class="progress">
-                    <div class="progress-bar progress-bar-striped active"
-                         role="progressbar" aria-valuenow="100" aria-valuemin="0"
-                         aria-valuemax="100"
-                         style="width: 100%;"></div>
+                    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
                 </div>
             </div>
 
-            <div ng-hide="testResultRunning" id="traffic-test-results">
-                <div class="panel panel-default" ng-show="testResult.udp">
-                    <div class="panel-heading">UDP Traffic Test Result</div>
+            <div ng-show="showTenantsDiscovering">
+                Discovering tenants <span class="pull-right">Please wait...</span>
+                <div class="progress">
+                    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div ng-hide="showTenantsLoading || showTenantsDiscovering">
+            <div class="col-md-3">
+                <table class="table table-bordered bg-white" ng-show="tenants.length > 0">
+                    <tr>
+                        <th class="col-md-11">Name</th>
+                        <th class="col-md-1"></th>
+                    </tr>
+                    <tr ng-repeat="tenant in tenants">
+                        <td>{$ tenant.tenant_name $} <span class="label label-info pull-right">{$ tenant.enabled $}</span> </td>
+                        <td class="text-center">
+                            <input type="radio" name="selected_tenant"
+                                   ng-model="selectedTenant"
+                                   ng-value="tenant"
+                                   ng-checked="(selectedTenant.id == tenant.id)"
+                                   ng-click="discoverNetworks($index)" />
+                        </td>
+                    </tr>
+                </table>
+
+                <p ng-hide="tenants.length > 0">No tenants found. Click <a href ng-click="discoverTenants()">here</a> to discover.</p>
+            </div>
+
+            <div class="col-md-9" ng-show="tenants.length > 0">
+                <ng-include src="'/static/partials/cloud/traffic/traffic_view_tenants_dev_env.html'"></ng-include>
+                <ng-include src="'/static/partials/cloud/traffic/traffic_view_tenants_prod_env.html'"></ng-include>
+
+                <div ng-show="endpoints.length > 0 ">
+                    <div class="alert alert-info" ng-if="selectedEndpointsCount == 0">Please select endpoints to start traffic test</div>
+                    <div class="alert alert-danger" ng-if="selectedEndpointsCount <= 1 && selectedEndpointsCount != 0">Please select more than 1 endpoints to start traffic test</div>
+
+                    <button type="button" class="btn btn-primary pull-right"
+                            data-toggle="modal" data-target="#trafficTestFormModal"
+                            ng-if="selectedEndpointsCount > 1">
+                        Run Traffic Test
+                    </button>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- reports -->
+        <div ng-show="reports.length > 0">
+            <div class="page-header">
+                <h1>Traffic Test Reports</h1>
+            </div>
+
+            <table class="table table-bordered table-striped bg-white">
+                <tr>
+                    <th>Id</th>
+                    <th class="col-md-1">Test Run Duration</th>
+                    <th>Started On</th>
+                    <th>Completed On</th>
+                    <th class="col-md-1">Status</th>
+                    <th class="col-md-1">Actions</th>
+                </tr>
+                <tr ng-repeat="report in reports | orderBy:'-id'">
+                    <td>{$ report.id $}</td>
+                    <td>{$ report.test_run_duration $} min</td>
+                    <td>{$ report.started_on $}</td>
+                    <td>{$ report.completed_on $}</td>
+                    <td>
+                        <span class="label label-danger" ng-show="report.status == 'error'">Error</span>
+                        <span class="label label-warning" ng-show="report.status == 'inprogress'">In Progress</span>
+                        <span class="label label-primary" ng-show="report.status == 'queued'">Queued</span>
+                        <span class="label label-success" ng-show="report.status == 'completed'">Completed</span>
+                    </td>
+                    <td class="text-right">
+                        <span ng-show="report.status == 'completed'">
+                            <a href ng-click="viewReport(report.id)"><i class="fa fa-eye fa-fw" data-toggle="modal" data-target="#viewReportModal"></i></a>
+                            <a href><i class="fa fa-download fa-fw"></i></a>
+                            <a href><i class="fa fa-envelope fa-fw"></i></a>
+                        </span>
+                        <a href><i class="fa fa-trash fa-fw"></i></a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- run traffic test modal -->
+<div class="modal fade" id="trafficTestFormModal" tabindex="-1" role="dialog" aria-labelledby="trafficTestFormModalLabel">
+    <div class="modal-dialog small" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="trafficFormModalLabel">Run Traffic Test</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-inline" ng-hide="trafficTestRunning">
+                    <div class="form-group">
+                        <label>Run traffic test for</label>
+                        <select name="trafficTestDuration" class="form-control" ng-model="trafficTestDuration">
+                            <option value=1>1</option>
+                            <option value=2>2</option>
+                            <option value=3>3</option>
+                            <option value=4>4</option>
+                            <option value=5>5</option>
+                        </select>
+                        <label>minute(s).</label>
+                    </div>
+                </form>
+
+                <div ng-show="trafficTestRunning">
+                    Running traffic test <span class="pull-right">Please wait...</span>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
+                            traffic test duration: {$ trafficTestDuration $} min(s)
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel panel-default" ng-if="report.udp_test_results.length > 0">
+                    <div class="panel-heading">UDP Test Results</div>
                     <table class="table table-bordered">
                         <tr>
-                            <th>Source Tenant</th>
-                            <th>Source Endpoint</th>
-                            <th>Destination Tenant</th>
-                            <th>Destination Endpoint</th>
-                            <th>Interval Time</th>
+                            <th class="col-md-1">Source Tenant</th>
+                            <th class="col-md-1">Destination Tenant</th>
+                            <th class="col-md-1">Source Endpoints</th>
+                            <th class="col-md-1">Destination Endpoints</th>
+                            <th class="col-md-1">Jitter</th>
+                            <th class="col-md-1">Bandwidth</th>
+                            <th class="col-md-1">Bandwidth Loss %</th>
+                            <th class="col-md-1">Interval Time</th>
                             <th>Transferred</th>
-                            <th>Bandwidth</th>
-                            <th>Jitter</th>
-                            <th>Loss Datagram</th>
-                            <th>Total Datagram</th>
-                            <th>Loss %</th>
-                            <th>Status</th>
+                            <th class="col-md-1">Loss Datagrams</th>
+                            <th>Total Datagrams</th>
+                            <th class="col-md-1">Status</th>
                         </tr>
-                        <tr ng-repeat="res in testResult.udp">
-                            <td>{$ res.src_tenant[0] $}</td>
+                        <tr ng-repeat="res in report.udp_test_results">
+                            <td>{$ res.src_tenant $}</td>
+                            <td>{$ res.dest_tenant $}</td>
                             <td>{$ res.src_ep $}</td>
-                            <td>{$ res.dest_tenant[0] $}</td>
                             <td>{$ res.dest_ep $}</td>
+                            <td>{$ res.jitter $}</td>
+                            <td>{$ res.bandwidth $}</td>
+                            <td>{$ res.bandwidth_loss_percent $}</td>
                             <td>{$ res.interval_time $}</td>
                             <td>{$ res.transferred $}</td>
-                            <td>{$ res.bandwidth $}</td>
-                            <td>{$ res.jitter $}</td>
                             <td>{$ res.loss_datagram $}</td>
                             <td>{$ res.total_datagram $}</td>
-                            <td>{$ res.bandwidth_loss_percent $}</td>
                             <td>{$ res.status $}</td>
                         </tr>
                     </table>
                 </div>
 
-
-                <div class="panel panel-default" ng-show="testResult.tcp">
-                    <div class="panel-heading">TCP Traffic Test Result</div>
+                <div class="panel panel-default" ng-if="report.icmp_test_results.length > 0">
+                    <div class="panel-heading">ICMP Test Results</div>
                     <table class="table table-bordered">
                         <tr>
-                            <th>Source Tenant</th>
-                            <th>Source Endpoint</th>
-                            <th>Destination Tenant</th>
-                            <th>Destination Endpoint</th>
-                            <th>Interval Time</th>
-                            <th>Transferred</th>
-                            <th>Bandwidth</th>
-                            <th>Retr</th>
-                            <th>Status</th>
+                            <th class="col-md-1">Source Tenant</th>
+                            <th class="col-md-1">Destination Tenant</th>
+                            <th class="col-md-1">Source Endpoints</th>
+                            <th class="col-md-1">Destination Endpoints</th>
+                            <th>rtt min</th>
+                            <th>rtt max</th>
+                            <th>rtt avg</th>
+                            <th>Packets Recieved</th>
+                            <th>Packets Transmitted</th>
+                            <th>Packets Loss Percetage</th>
+                            <th class="col-md-1">Status</th>
                         </tr>
-                        <tr ng-repeat="res in testResult.tcp">
-                            <td>{$ res.src_tenant[0] $}</td>
+                        <tr ng-repeat="res in report.icmp_test_results">
+                            <td>{$ res.src_tenant $}</td>
+                            <td>{$ res.dest_tenant $}</td>
                             <td>{$ res.src_ep $}</td>
-                            <td>{$ res.dest_tenant[0] $}</td>
                             <td>{$ res.dest_ep $}</td>
+                            <td>{$ res.rtt_min $}</td>
+                            <td>{$ res.rtt_max $}</td>
+                            <td>{$ res.rtt_avg $}</td>
+                            <td>{$ res.packets_received $}</td>
+                            <td>{$ res.packets_transmitted $}</td>
+                            <td>{$ res.packet_loss_percent $}</td>
+                            <td>{$ res.status $}</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="panel panel-default" ng-if="report.tcp_test_results.length > 0">
+                    <div class="panel-heading">TCP Test Results</div>
+                    <table class="table table-bordered">
+                        <tr>
+                            <th class="col-md-1">Source Tenant</th>
+                            <th class="col-md-1">Destination Tenant</th>
+                            <th class="col-md-1">Source Endpoints</th>
+                            <th class="col-md-1">Destination Endpoints</th>
+                            <th>retr</th>
+                            <th>Bandwidth</th>
+                            <th>Interval Time/th>
+                            <th>Transferred</th>
+                            <th class="col-md-1">Status</th>
+                        </tr>
+                        <tr ng-repeat="res in report.tcp_test_results">
+                            <td>{$ res.src_tenant $}</td>
+                            <td>{$ res.dest_tenant $}</td>
+                            <td>{$ res.src_ep $}</td>
+                            <td>{$ res.dest_ep $}</td>
+                            <td>{$ res.retr $}</td>
+                            <td>{$ res.bandwidth $}</td>
                             <td>{$ res.interval_time $}</td>
                             <td>{$ res.transferred $}</td>
-                            <td>{$ res.bandwidth $}</td>
-                            <td>{$ res.retr $}</td>
                             <td>{$ res.status $}</td>
                         </tr>
                     </table>
                 </div>
-
-                <div class="panel panel-default" ng-show="testResult.icmp">
-                    <div class="panel-heading">ICMP Traffic Test Result</div>
-                    <table class="table table-bordered">
-                        <tr>
-                            <th>Source Tenant</th>
-                            <th>Source Endpoint</th>
-                            <th>Destination Tenant</th>
-                            <th>Destination Endpoint</th>
-                            <th>Packets Transmitted</th>
-                            <th>Packets Received</th>
-                            <th>Packet Loss %</th>
-                            <th>rtt min</th>
-                            <th>rtt avg</th>
-                            <th>rtt max</th>
-                            <th>Status</th>
-                        </tr>
-                        <tr ng-repeat="res in testResult.icmp">
-                            <td>{$ res.src_tenant[0] $}</td>
-                            <td>{$ res.src_ep $}</td>
-                            <td>{$ res.dest_tenant[0] $}</td>
-                            <td>{$ res.dest_ep $}</td>
-                            <td>{$ res.packets_transmitted $}</td>
-                            <td>{$ res.packets_received $}</td>
-                            <td>{$ res.packet_loss_percent $}</td>
-                            <td>{$ res.rtt_min $}</td>
-                            <td>{$ res.rtt_avg $}</td>
-                            <td>{$ res.rtt_max $}</td>
-                            <td>{$ res.status $}</td>
-                        </tr>
-                    </table>
-                </div>
-
-                <div id="editor"></div>
-                <button type="button" ng-click="exportTrafficTestResults()" class="btn btn-info">Download</button>
-                <button type="button" ng-click="emailReport()" class="btn btn-primary">Email Report</button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-danger" ng-click="runTrafficTest()" ng-disabled="trafficTestRunning">Run Test</button>
             </div>
         </div>
     </div>
-    <!-- end: traffic test panel -->
 </div>
+<!-- end traffic test modal -->
+
+
+
+<!-- view report modal -->
+<div class="modal fade" id="viewReportModal" tabindex="-1" role="dialog" aria-labelledby="viewReportModalLabel">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="trafficFormModalLabel">Traffic Test Report</h4>
+            </div>
+            <div class="modal-body">
+                <div ng-show="showLoadingReport">
+                    Loading report <span class="pull-right">Please wait...</span>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+                    </div>
+                </div>
+
+                <div class="panel panel-default" ng-if="report.udp_test_results.length > 0">
+                    <div class="panel-heading">UDP Test Results</div>
+                    <table class="table table-bordered">
+                        <tr>
+                            <th class="col-md-1">Source Tenant</th>
+                            <th class="col-md-1">Destination Tenant</th>
+                            <th class="col-md-1">Source Endpoints</th>
+                            <th class="col-md-1">Destination Endpoints</th>
+                            <th class="col-md-1">Jitter</th>
+                            <th class="col-md-1">Bandwidth</th>
+                            <th class="col-md-1">Bandwidth Loss %</th>
+                            <th class="col-md-1">Interval Time</th>
+                            <th>Transferred</th>
+                            <th class="col-md-1">Loss Datagrams</th>
+                            <th>Total Datagrams</th>
+                            <th class="col-md-1">Status</th>
+                        </tr>
+                        <tr ng-repeat="res in report.udp_test_results">
+                            <td>{$ res.src_tenant $}</td>
+                            <td>{$ res.dest_tenant $}</td>
+                            <td>{$ res.src_ep $}</td>
+                            <td>{$ res.dest_ep $}</td>
+                            <td>{$ res.jitter $}</td>
+                            <td>{$ res.bandwidth $}</td>
+                            <td>{$ res.bandwidth_loss_percent $}</td>
+                            <td>{$ res.interval_time $}</td>
+                            <td>{$ res.transferred $}</td>
+                            <td>{$ res.loss_datagram $}</td>
+                            <td>{$ res.total_datagram $}</td>
+                            <td>{$ res.status $}</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="panel panel-default" ng-if="report.icmp_test_results.length > 0">
+                    <div class="panel-heading">ICMP Test Results</div>
+                    <table class="table table-bordered">
+                        <tr>
+                            <th class="col-md-1">Source Tenant</th>
+                            <th class="col-md-1">Destination Tenant</th>
+                            <th class="col-md-1">Source Endpoints</th>
+                            <th class="col-md-1">Destination Endpoints</th>
+                            <th>rtt min</th>
+                            <th>rtt max</th>
+                            <th>rtt avg</th>
+                            <th>Packets Recieved</th>
+                            <th>Packets Transmitted</th>
+                            <th>Packets Loss Percetage</th>
+                            <th class="col-md-1">Status</th>
+                        </tr>
+                        <tr ng-repeat="res in report.icmp_test_results">
+                            <td>{$ res.src_tenant $}</td>
+                            <td>{$ res.dest_tenant $}</td>
+                            <td>{$ res.src_ep $}</td>
+                            <td>{$ res.dest_ep $}</td>
+                            <td>{$ res.rtt_min $}</td>
+                            <td>{$ res.rtt_max $}</td>
+                            <td>{$ res.rtt_avg $}</td>
+                            <td>{$ res.packets_received $}</td>
+                            <td>{$ res.packets_transmitted $}</td>
+                            <td>{$ res.packet_loss_percent $}</td>
+                            <td>{$ res.status $}</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="panel panel-default" ng-if="report.tcp_test_results.length > 0">
+                    <div class="panel-heading">TCP Test Results</div>
+                    <table class="table table-bordered">
+                        <tr>
+                            <th class="col-md-1">Source Tenant</th>
+                            <th class="col-md-1">Destination Tenant</th>
+                            <th class="col-md-1">Source Endpoints</th>
+                            <th class="col-md-1">Destination Endpoints</th>
+                            <th>retr</th>
+                            <th>Bandwidth</th>
+                            <th>Interval Time/th>
+                            <th>Transferred</th>
+                            <th class="col-md-1">Status</th>
+                        </tr>
+                        <tr ng-repeat="res in report.tcp_test_results">
+                            <td>{$ res.src_tenant $}</td>
+                            <td>{$ res.dest_tenant $}</td>
+                            <td>{$ res.src_ep $}</td>
+                            <td>{$ res.dest_ep $}</td>
+                            <td>{$ res.retr $}</td>
+                            <td>{$ res.bandwidth $}</td>
+                            <td>{$ res.interval_time $}</td>
+                            <td>{$ res.transferred $}</td>
+                            <td>{$ res.status $}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end traffic test modal -->
+
+
+
+
+
 

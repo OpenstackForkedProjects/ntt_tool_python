@@ -458,15 +458,15 @@ def start_task(config, endpoints_list, action, testPrefix=None):
                     for dest_ep in client_ip:
                         table_data = execute(stop_iperf_traffic, env, 'udp', server, dest_ep, endpoints['src_tenant'], endpoints['dest_tenant'], timestamp)
                         udp_output_table_data_list.append(table_data)
-    
+
     traffic_test_result = {
         "icmp": format_icmp_test_results(output_table_data_list, config.get('traffic', {}).get('allowed_delta_percentage')),
         "tcp": format_tcp_test_results(tcp_output_table_data_list),
         "udp": format_udp_test_results(udp_output_table_data_list,)
     }
 
-    traffic_test_result_path = settings.MEDIA_ROOT
-    pickle.dump(traffic_test_result, open(os.path.join(traffic_test_result_path, "traffic-test-report.txt"), "wb"))
+    # traffic_test_result_path = settings.MEDIA_ROOT
+    # pickle.dump(traffic_test_result, open(os.path.join(traffic_test_result_path, "traffic-test-report.txt"), "wb"))
 
     return traffic_test_result
 
