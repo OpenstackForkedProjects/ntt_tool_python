@@ -1,0 +1,168 @@
+<html>
+<head>
+<style>
+    @page {
+        size: a4 portrait;
+        @frame header_frame {
+            -pdf-frame-content: header_content;
+            left: 50pt; width: 512pt; top: 50pt; height: 40pt;
+        }
+        @frame content_frame {
+            left: 50pt; width: 512pt; top: 90pt; height: 632pt;
+        }
+        @frame footer_frame {
+            -pdf-frame-content: footer_content;
+            left: 50pt; width: 512pt; top: 772pt; height: 20pt;
+        }
+    }
+
+    .text-center {
+        text-align: center;
+    }
+    .page-header {
+        text-align: center;
+        border-bottom: 1px solid #dddddd;
+    }
+    .gridtable {
+        border: 1px solid #dddddd;
+        border-collapse: collapse;
+        color:#333333;
+        font-size:10px;
+    }
+    .gridtable th {
+        border: 1px solid #dddddd;
+        background-color: #f6f6f6;
+        color: #0E3D59;
+        padding: 2px;
+    }
+    .gridtable td {
+        border: 1px solid #dddddd;
+        background-color: #ffffff;
+        padding: 2px;
+    }
+</style>
+</head>
+
+<body>
+    <!-- Content for Static Frame 'header_frame' -->
+    <h1 id="header_content" class="page-header">Traffic Test Report</h1>
+
+    <!-- ICMP Test Result -->
+    {% if data.icmp_test_results %}
+    <h4>ICMP Test Result</h4>
+    <table class="gridtable">
+        <tr>
+            <th style="width:20%">Source Tenant</th>
+            <th style="width:20%">Destination Tenant</th>
+            <th style="width:20%">Source Endpoints</th>
+            <th style="width:20%">Destination Endpoints</th>
+            <th>rtt min</th>
+            <th>rtt max</th>
+            <th>rtt avg</th>
+            <th>Packets Recieved</th>
+            <th>Packets Transmitted</th>
+            <th>Packets Loss Percetage</th>
+            <th style="width:15%">Status</th>
+        </tr>
+        {% for res in data.icmp_test_results %}
+        <tr>
+            <td>{{ res.src_tenant }}</td>
+            <td>{{ res.dest_tenant }}</td>
+            <td>{{ res.src_ep }}</td>
+            <td>{{ res.dest_ep }}</td>
+            <td>{{ res.rtt_min }}</td>
+            <td>{{ res.rtt_max }}</td>
+            <td>{{ res.rtt_avg }}</td>
+            <td>{{ res.packets_received }}</td>
+            <td>{{ res.packets_transmitted }}</td>
+            <td>{{ res.packet_loss_percent }}</td>
+            <td>{{ res.status }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+    <!-- end: ICMP Test Results -->
+
+    <br>
+    <br>
+
+    <!-- UDP Test Result -->
+    {% if data.udp_test_results %}
+    <h4>UDP Test Result</h4>
+    <table class="gridtable">
+        <tr>
+            <th style="width:20%">Source Tenant</th>
+            <th style="width:20%">Destination Tenant</th>
+            <th style="width:20%">Source Endpoints</th>
+            <th style="width:20%">Destination Endpoints</th>
+            <th>Jitter</th>
+            <th>Bandwidth</th>
+            <th>Bandwidth Loss %</th>
+            <th>Interval Time</th>
+            <th>Transferred</th>
+            <th>Loss Datagrams</th>
+            <th>Total Datagrams</th>
+            <th style="width:15%">Status</th>
+        </tr>
+        {% for res in data.udp_test_results %}
+        <tr>
+            <td>{{ res.src_tenant }}</td>
+            <td>{{ res.dest_tenant }}</td>
+            <td>{{ res.src_ep }}</td>
+            <td>{{ res.dest_ep }}</td>
+            <td>{{ res.jitter }}</td>
+            <td>{{ res.bandwidth }}</td>
+            <td>{{ res.bandwidth_loss_percent }}</td>
+            <td>{{ res.interval_time }}</td>
+            <td>{{ res.transferred }}</td>
+            <td>{{ res.loss_datagram }}</td>
+            <td>{{ res.total_datagram }}</td>
+            <td>{{ res.status }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+    <!-- end: udp Test Results -->
+
+
+    <br>
+    <br>
+
+    <!-- TCP Test Result -->
+    {% if data.tcp_test_results %}
+    <h4>TCP Test Result</h4>
+    <table class="gridtable">
+        <tr>
+            <th style="width:20%">Source Tenant</th>
+            <th style="width:20%">Destination Tenant</th>
+            <th style="width:20%">Source Endpoints</th>
+            <th style="width:20%">Destination Endpoints</th>
+            <th>retr</th>
+            <th>Bandwidth</th>
+            <th>Interval Time</th>
+            <th>Transferred</th>
+            <th style="width:15%">Status</th>
+        </tr>
+        {% for res in data.tcp_test_results %}
+        <tr>
+            <td>{{ res.src_tenant }}</td>
+            <td>{{ res.dest_tenant }}</td>
+            <td>{{ res.src_ep }}</td>
+            <td>{{ res.dest_ep }}</td>
+            <td>{{ res.retr }}</td>
+            <td>{{ res.bandwidth }}</td>
+            <td>{{ res.interval_time }}</td>
+            <td>{{ res.transferred }}</td>
+            <td>{{ res.status }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+    <!-- end: TCP Test Results -->
+
+    <!-- Content for Static Frame 'footer_frame' -->
+    <div id="footer_content">page <pdf:pagenumber>
+        of <pdf:pagecount>
+    </div>
+</body>
+</html>

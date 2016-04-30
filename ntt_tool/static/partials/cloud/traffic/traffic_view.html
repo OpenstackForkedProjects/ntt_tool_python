@@ -121,7 +121,7 @@
         <!-- reports -->
         <div ng-show="reports.length > 0">
             <div class="page-header">
-                <h1>Traffic Test Reports</h1>
+                <h1>Traffic Test Runs</h1>
             </div>
 
             <table class="table table-bordered table-striped bg-white">
@@ -147,7 +147,7 @@
                     <td class="text-right">
                         <span ng-show="report.status == 'completed'">
                             <a href ng-click="viewReport(report.id)"><i class="fa fa-eye fa-fw" data-toggle="modal" data-target="#viewReportModal"></i></a>
-                            <a href><i class="fa fa-download fa-fw"></i></a>
+                            <a href ng-click="downloadReport(report.id, report.report_name)"><i class="fa fa-download fa-fw"></i></a>
                             <a href><i class="fa fa-envelope fa-fw"></i></a>
                         </span>
                         <a href><i class="fa fa-trash fa-fw"></i></a>
@@ -268,7 +268,7 @@
                             <th class="col-md-1">Destination Endpoints</th>
                             <th>retr</th>
                             <th>Bandwidth</th>
-                            <th>Interval Time/th>
+                            <th>Interval Time</th>
                             <th>Transferred</th>
                             <th class="col-md-1">Status</th>
                         </tr>
@@ -389,7 +389,7 @@
                             <th class="col-md-1">Destination Endpoints</th>
                             <th>retr</th>
                             <th>Bandwidth</th>
-                            <th>Interval Time/th>
+                            <th>Interval Time</th>
                             <th>Transferred</th>
                             <th class="col-md-1">Status</th>
                         </tr>

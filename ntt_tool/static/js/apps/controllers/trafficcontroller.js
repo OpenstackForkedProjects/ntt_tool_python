@@ -54,7 +54,7 @@ nttApp.controller('TrafficListCtrl', function($scope, $routeParams, trafficServi
     }
 });
 
-nttApp.controller('TrafficViewCtrl', function($scope, $routeParams, trafficService, tenantService, networkService, endpointService){
+nttApp.controller('TrafficViewCtrl', function($scope, $routeParams, trafficService, tenantService, networkService, endpointService, $http){
     $scope.cloudId = $routeParams.cloudId;
     $scope.id = $routeParams.id;
     $scope.traffic = {};
@@ -221,10 +221,19 @@ nttApp.controller('TrafficViewCtrl', function($scope, $routeParams, trafficServi
     };
     
     
-    $scope.isEmpty = function (obj) {
-        for (var i in obj) if (obj.hasOwnProperty(i)) return false;
-        return true;
+    $scope.downloadReport = function (testRunId, reportName) {
+        var url = '/api/traffic/report/download/' + testRunId + '/';
+        $http.post(url, {}, {responseType: 'arraybuffer'}).then(function (response) {
+            var headers = response.headers();
+            var blob = new Blob([response.data],{type:headers['content-type']});
+            var link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = "test.pdf";
+            link.click();
+        });
     };
+
+
     // $scope.testResult = {};
     // $scope.testResultRunning = false;
     // $scope.runTrafficTest = function (trafficId) {

@@ -6,7 +6,7 @@ var nttApp = angular.module('nttApp', [
     'checklist-model',
 ]);
 
-nttApp.config(['$httpProvider', '$interpolateProvider', function($httpProvider, $interpolateProvider){
+nttApp.config(['$httpProvider', '$interpolateProvider', function($httpProvider, $interpolateProvider, $window){
     /* For compatibility with django template engine */
     $interpolateProvider.startSymbol('{$');
     $interpolateProvider.endSymbol('$}');

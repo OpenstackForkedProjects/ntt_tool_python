@@ -1,4 +1,7 @@
 import json
+from django.conf import settings
+from django.http import StreamingHttpResponse
+from django.http import HttpResponse
 from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.decorators import list_route, detail_route
@@ -102,7 +105,24 @@ class TrafficViewSet(viewsets.ModelViewSet):
         test_run = TestRun.objects.get(pk=test_run_id)
         serializer = TestRunSerializer(test_run)
         return Response(serializer.data)
-    
+
+    @list_route(methods=['get', 'post'], url_path='report/download/(?P<test_run_id>[-\w]+)')
+    def download_report(self, request, test_run_id=None):
+        test_run = TestRun.objects.get(pk=test_run_id)
+        serializer = TestRunSerializer(test_run)
+
+        from django.template import Context
+        from django.template.loader import get_template
+        from xhtml2pdf import pisa
+        import cStringIO as StringIO
+
+        template = get_template('reports/traffic_test_report.html')
+        context = Context({'data': serializer.data})
+        html = template.render(context)
+        result = StringIO.StringIO()
+        pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("ISO-8859-1")), result)
+        return HttpResponse(result.getvalue(), content_type='application/pdf')
+
     @detail_route(methods=['get'], url_path='email/report')
     def email_report(self, request, pk=None):
         context = None

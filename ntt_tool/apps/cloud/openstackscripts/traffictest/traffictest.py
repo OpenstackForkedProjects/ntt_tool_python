@@ -17,6 +17,8 @@ class TrafficTest(object):
         test_run.started_by = started_by
         test_run.save()
 
+
+
         try:
             endpoints_list = self.generate_endpoints_contract_list()
             setup_config = self.generate_setup_config()

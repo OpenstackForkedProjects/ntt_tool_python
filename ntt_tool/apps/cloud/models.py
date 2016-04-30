@@ -132,6 +132,7 @@ class TestRun(models.Model):
         ('error', 'Error'),
     )
     traffic = models.ForeignKey(Traffic)
+    report_name = models.CharField(max_length=100, blank=True, null=True)
     test_run_duration = models.IntegerField(default=1)
     started_on = models.DateTimeField(auto_now=True)
     started_by = models.ForeignKey(User)

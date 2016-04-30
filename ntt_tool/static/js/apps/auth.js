@@ -2,7 +2,7 @@ nttApp.run(function($rootScope, $window, $location){
     $rootScope.isLoggedin = false;
     if($window.localStorage.isLoggedin){
         $rootScope.isLoggedin = true;
-    };
+    }
 
     $rootScope.$on('event:auth-loginConfirmed', function(event, data){
         $('#modal').modal('hide');
