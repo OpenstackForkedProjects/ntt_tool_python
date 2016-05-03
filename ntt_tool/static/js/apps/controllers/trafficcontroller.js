@@ -37,16 +37,18 @@ nttApp.controller('TrafficListCtrl', function($scope, $routeParams, trafficServi
                 selectedTestMethods.push(testMethod)
             }
         });
-        $scope.traffic["test_method"] = selectedTestMethods.join();
+
+        var trafficObj = angular.copy($scope.traffic);
+        trafficObj["test_method"] = selectedTestMethods.join();
 
         if($scope.event == "Add") {
-            trafficService.create($scope.traffic).then(function (response) {
+            trafficService.create(trafficObj).then(function (response) {
                 $scope.trafficList.push(response);
                 $("#trafficFormModal").modal('hide');
             });
         }
         else {
-            trafficService.update($scope.traffic.id, $scope.traffic).then(function(response){
+            trafficService.update(trafficObj.id, trafficObj).then(function(response){
                 $scope.trafficList[$scope.traffic.$index] = response;
                 $("#trafficFormModal").modal('hide');
             });
@@ -220,7 +222,6 @@ nttApp.controller('TrafficViewCtrl', function($scope, $routeParams, trafficServi
         });
     };
     
-    
     $scope.downloadReport = function (testRunId, reportName) {
         var url = '/api/traffic/report/download/' + testRunId + '/';
         $http.post(url, {}, {responseType: 'arraybuffer'}).then(function (response) {
@@ -234,31 +235,9 @@ nttApp.controller('TrafficViewCtrl', function($scope, $routeParams, trafficServi
     };
 
 
-    // $scope.testResult = {};
-    // $scope.testResultRunning = false;
-    // $scope.runTrafficTest = function (trafficId) {
-    //     $scope.testResultRunning = true;
-    //     trafficService.runTrafficTest(trafficId).then(function (response) {
-    //         $scope.testResult = response;
-    //         $scope.testResultRunning = false;
-    //     });
-    // };
-    //
-    // var doc = new jsPDF();
-    // var specialElementHandlers = {
-    //     '#editor': function (element, renderer) {
-    //         return true;
-    //     }
-    // };
-    // $scope.exportTrafficTestResults = function () {
-    //     doc.fromHTML($('#traffic-test-results').html(), 10, 10, {
-    //         'width': 200,
-    //         'elementHandlers': specialElementHandlers
-    //     });
-    //     doc.save('traffic-test-report.pdf');
-    // };
-    //
-    //
+
+
+
     // $scope.emailReport = function () {
     //     trafficService.emailReport($scope.traffic.id).then(function (response) {
     //         console.log(response)

@@ -1,13 +1,15 @@
 import json
-from django.conf import settings
-from django.http import StreamingHttpResponse
+import cStringIO as StringIO
 from django.http import HttpResponse
+from django.template import Context
+from django.template.loader import get_template
 from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.decorators import list_route, detail_route
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
+from xhtml2pdf import pisa
 from models import *
 from serializers import *
 from openstackscripts.keystoneclientutils import KeystoneClientUtils
@@ -18,13 +20,8 @@ from openstackscripts.endpoints import DiscoverEndpoints, LaunchEndpoints
 from openstackscripts.traffictest.traffictest import TrafficTest
 
 
-
 import os
 import pickle
-from django.template import Context
-from django.template.loader import get_template
-
-
 from django.core.mail import EmailMessage
 from email.mime.text import MIMEText
 from django.conf import settings
@@ -82,10 +79,13 @@ class TrafficViewSet(viewsets.ModelViewSet):
         Overriding method to provide selected tenants, creator and cloud_id at the time of creating traffic.
         """
         serializer.save(
-            tenants=self.request.data.getlist('tenants[]'),
+            test_method=self.request.data.get("test_method"),
             creator=self.request.user,
             cloud_id=self.request.data.get('cloud_id')
         )
+
+    def perform_update(self, serializer):
+        serializer.save(test_method=self.request.data.get("test_method"))
 
     @detail_route(methods=['get'], url_path='run/test')
     def run_traffic_test(self, request, pk=None):
@@ -110,11 +110,6 @@ class TrafficViewSet(viewsets.ModelViewSet):
     def download_report(self, request, test_run_id=None):
         test_run = TestRun.objects.get(pk=test_run_id)
         serializer = TestRunSerializer(test_run)
-
-        from django.template import Context
-        from django.template.loader import get_template
-        from xhtml2pdf import pisa
-        import cStringIO as StringIO
 
         template = get_template('reports/traffic_test_report.html')
         context = Context({'data': serializer.data})

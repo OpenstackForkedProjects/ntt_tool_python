@@ -25,12 +25,10 @@ class Traffic(models.Model):
         ('south-north', 'South to North'),
         ('north-south', 'North to South'),
     )
-
     TEST_ENVIRONMENT_CHOICES = (
         ('dev', 'Development/Test'),
         ('prod', 'Production'),
     )
-
     cloud = models.ForeignKey(Cloud, blank=True, null=True, related_name="traffics")
     name = models.CharField(max_length=256)
     allowed_delta_percentage = models.FloatField()
