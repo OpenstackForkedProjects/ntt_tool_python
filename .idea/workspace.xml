@@ -2,17 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="14b1c637-e7d4-402a-92e3-fc8b86ab1bd3" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ntt_tool/media/sample.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ntt_tool/templates/reports/traffic_test_report.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ntt_tool/apps/cloud/models.py" afterPath="$PROJECT_DIR$/ntt_tool/apps/cloud/models.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ntt_tool/apps/cloud/openstackscripts/traffictest/traffictest.py" afterPath="$PROJECT_DIR$/ntt_tool/apps/cloud/openstackscripts/traffictest/traffictest.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ntt_tool/apps/cloud/views.py" afterPath="$PROJECT_DIR$/ntt_tool/apps/cloud/views.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ntt_tool/static/js/apps/app.js" afterPath="$PROJECT_DIR$/ntt_tool/static/js/apps/app.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ntt_tool/static/js/apps/auth.js" afterPath="$PROJECT_DIR$/ntt_tool/static/js/apps/auth.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ntt_tool/static/js/apps/controllers/trafficcontroller.js" afterPath="$PROJECT_DIR$/ntt_tool/static/js/apps/controllers/trafficcontroller.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ntt_tool/static/js/apps/services/dataservice.js" afterPath="$PROJECT_DIR$/ntt_tool/static/js/apps/services/dataservice.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ntt_tool/static/js/apps/services/trafficservice.js" afterPath="$PROJECT_DIR$/ntt_tool/static/js/apps/services/trafficservice.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ntt_tool/static/partials/cloud/traffic/traffic_view.html" afterPath="$PROJECT_DIR$/ntt_tool/static/partials/cloud/traffic/traffic_view.html" />
     </list>
     <ignored path="ntt_tool.iws" />
@@ -54,7 +43,7 @@
       <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ntt_tool/apps/cloud/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="546">
+            <state relative-caret-position="1050">
               <caret line="124" column="0" selection-start-line="124" selection-start-column="0" selection-end-line="124" selection-end-column="0" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
@@ -63,28 +52,12 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="traffic_test_report.html" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/ntt_tool/templates/reports/traffic_test_report.html">
+      <file leaf-file-name="traffic_view.html" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/ntt_tool/static/partials/cloud/traffic/traffic_view.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="316">
-              <caret line="141" column="29" selection-start-line="141" selection-start-column="12" selection-end-line="141" selection-end-column="29" />
-              <folding>
-                <element signature="n#style#0;n#th#0;n#tr#0;n#table#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#th#1;n#tr#0;n#table#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#th#2;n#tr#0;n#table#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#th#3;n#tr#0;n#table#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#th#10;n#tr#0;n#table#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#th#0;n#tr#0;n#table#1;n#body#0;n#html#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#th#1;n#tr#0;n#table#1;n#body#0;n#html#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#th#2;n#tr#0;n#table#1;n#body#0;n#html#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#th#3;n#tr#0;n#table#1;n#body#0;n#html#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#th#11;n#tr#0;n#table#1;n#body#0;n#html#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#th#0;n#tr#0;n#table#2;n#body#0;n#html#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#th#1;n#tr#0;n#table#2;n#body#0;n#html#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#th#2;n#tr#0;n#table#2;n#body#0;n#html#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#th#3;n#tr#0;n#table#2;n#body#0;n#html#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#th#8;n#tr#0;n#table#2;n#body#0;n#html#0;n#!!top" expanded="true" />
-              </folding>
+            <state relative-caret-position="610">
+              <caret line="139" column="62" selection-start-line="139" selection-start-column="62" selection-end-line="139" selection-end-column="62" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -1041,7 +1014,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="65" y="24" width="1855" height="1056" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18167116" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.22482197" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -1429,28 +1402,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ntt_tool/apps/cloud/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="546">
-          <caret line="124" column="0" selection-start-line="124" selection-start-column="0" selection-end-line="124" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ntt_tool/static/partials/cloud/traffic/traffic_view.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="297">
-          <caret line="270" column="46" selection-start-line="270" selection-start-column="46" selection-end-line="270" selection-end-column="46" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/ntt_tool/templates/reports/traffic_test_report.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="316">
-          <caret line="141" column="29" selection-start-line="141" selection-start-column="12" selection-end-line="141" selection-end-column="29" />
+        <state relative-caret-position="358">
+          <caret line="149" column="37" selection-start-line="149" selection-start-column="37" selection-end-line="149" selection-end-column="37" />
           <folding>
             <element signature="n#style#0;n#th#0;n#tr#0;n#table#0;n#body#0;n#html#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#th#1;n#tr#0;n#table#0;n#body#0;n#html#0;n#!!top" expanded="true" />
@@ -1468,6 +1423,24 @@
             <element signature="n#style#0;n#th#3;n#tr#0;n#table#2;n#body#0;n#html#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#th#8;n#tr#0;n#table#2;n#body#0;n#html#0;n#!!top" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ntt_tool/apps/cloud/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1050">
+          <caret line="124" column="0" selection-start-line="124" selection-start-column="0" selection-end-line="124" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ntt_tool/static/partials/cloud/traffic/traffic_view.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="610">
+          <caret line="139" column="62" selection-start-line="139" selection-start-column="62" selection-end-line="139" selection-end-column="62" />
+          <folding />
         </state>
       </provider>
     </entry>

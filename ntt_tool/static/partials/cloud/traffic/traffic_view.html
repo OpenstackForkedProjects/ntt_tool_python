@@ -136,8 +136,8 @@
                 <tr ng-repeat="report in reports | orderBy:'-id'">
                     <td>{$ report.id $}</td>
                     <td>{$ report.test_run_duration $} min</td>
-                    <td>{$ report.started_on $}</td>
-                    <td>{$ report.completed_on $}</td>
+                    <td>{$ report.started_on | date:'medium' $}</td>
+                    <td>{$ report.completed_on | date:'medium' $}</td>
                     <td>
                         <span class="label label-danger" ng-show="report.status == 'error'">Error</span>
                         <span class="label label-warning" ng-show="report.status == 'inprogress'">In Progress</span>
