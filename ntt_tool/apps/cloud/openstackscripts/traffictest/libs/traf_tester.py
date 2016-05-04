@@ -1,7 +1,6 @@
 import json
 import logging
 import os
-import pickle
 import re
 import time
 import fabtools
@@ -9,7 +8,6 @@ import fabtools
 from itertools import *
 from operator import *
 from fabric.api import *
-from django.conf import settings
 
 
 traffic_test_script_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'scripts')
@@ -464,9 +462,5 @@ def start_task(config, endpoints_list, action, testPrefix=None):
         "tcp": format_tcp_test_results(tcp_output_table_data_list),
         "udp": format_udp_test_results(udp_output_table_data_list,)
     }
-
-    # traffic_test_result_path = settings.MEDIA_ROOT
-    # pickle.dump(traffic_test_result, open(os.path.join(traffic_test_result_path, "traffic-test-report.txt"), "wb"))
-
     return traffic_test_result
 

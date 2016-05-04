@@ -155,7 +155,7 @@ nttApp.controller('TrafficViewCtrl', function($scope, $routeParams, trafficServi
             if(network.is_selected){
                 selectedNetworks.push({
                     "network_id": network.id,
-                    "endpoint_ctrafficTestReportsount": network.endpoint_count
+                    "endpoint_count": network.endpoint_count
                 });
             }
         });
@@ -222,14 +222,14 @@ nttApp.controller('TrafficViewCtrl', function($scope, $routeParams, trafficServi
         });
     };
     
-    $scope.downloadReport = function (testRunId, reportName) {
+    $scope.downloadReport = function (testRunId, trafficName) {
         var url = '/api/traffic/report/download/' + testRunId + '/';
         $http.post(url, {}, {responseType: 'arraybuffer'}).then(function (response) {
             var headers = response.headers();
             var blob = new Blob([response.data],{type:headers['content-type']});
             var link = document.createElement('a');
             link.href = window.URL.createObjectURL(blob);
-            link.download = "test.pdf";
+            link.download = trafficName+"_"+testRunId+".pdf";
             link.click();
         });
     };

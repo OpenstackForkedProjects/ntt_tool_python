@@ -133,6 +133,7 @@ class TestRun(models.Model):
     report_name = models.CharField(max_length=100, blank=True, null=True)
     test_run_duration = models.IntegerField(default=1)
     started_on = models.DateTimeField(auto_now=True)
+    completed_on = models.DateTimeField(auto_now=True)
     started_by = models.ForeignKey(User)
     status = models.CharField(max_length=20, choices=TRAFFIC_TEST_RUN_STATUS, default='queued')
 

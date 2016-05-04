@@ -47,6 +47,31 @@
     <!-- Content for Static Frame 'header_frame' -->
     <h1 id="header_content" class="page-header">Traffic Test Report</h1>
 
+    <table class="gridtable">
+        <tr>
+            <td style="width: 50%;">Name : {{ data.traffic.name }}</td>
+            <td style="width: 50%;">Allowed delta percentage : {{ data.traffic.allowed_delta_percentage }} %</td>
+        </tr>
+        <tr>
+            <td style="width: 50%;">Remote User : {{ data.traffic.remote_user }}</td>
+            <td style="width: 50%;">Number of workers : {{ data.traffic.number_of_workers }}</td>
+        </tr>
+        <tr>
+            <td style="width: 50%;">Test environment : {{ data.traffic.test_environment }}</td>
+            <td style="width: 50%;">IPERF duration : {{ data.traffic.iperf_duration }} sec</td>
+        </tr>
+        <tr>
+            <td style="width: 50%;">SSH gateway : {{ data.traffic.ssh_gateway }}</td>
+            <td style="width: 50%;">Test Type : {{ data.traffic.test_type }}</td>
+        </tr>
+        <tr>
+            <td style="width: 50%;">Test result path : {{ data.traffic.test_result_path }}</td>
+            <td style="width: 50%;">Test Methods : {{ data.traffic.test_method }}</td>
+        </tr>
+    </table>
+    
+    <br>
+
     <!-- ICMP Test Result -->
     {% if data.icmp_test_results %}
     <h4>ICMP Test Result</h4>

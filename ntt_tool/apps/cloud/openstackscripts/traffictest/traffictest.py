@@ -1,4 +1,5 @@
 import time
+from django.utils import timezone
 from ntt_tool.apps.cloud.models import *
 from ntt_tool.apps.cloud.serializers import TestRunSerializer
 from utils import *
@@ -17,14 +18,15 @@ class TrafficTest(object):
         test_run.started_by = started_by
         test_run.save()
 
-
-
         try:
             endpoints_list = self.generate_endpoints_contract_list()
             setup_config = self.generate_setup_config()
             traf_tester.start_task(setup_config, endpoints_list, "start", "_".join(self.traffic.name.split()))
             time.sleep(60 * duration)
             test_results = traf_tester.start_task(setup_config, endpoints_list, "stop", "_".join(self.traffic.name.split()))
+
+            test_run.completed_on = timezone.now()
+            test_run.save()
 
             for test_method, results in test_results.iteritems():
                 if test_method == "udp":
@@ -83,14 +85,13 @@ class TrafficTest(object):
         serializer = TestRunSerializer(test_run)
         return serializer.data
 
-    def stop_test(self):
-        pass
-
     def generate_endpoints_contract_list(self):
         endpoint_contract_configs = []
         if self.traffic.test_type == 'intra-tenant':
             subnet_endpoints_map = {}
-            endpoints = Endpoint.objects.filter(traffic_id=self.traffic.id).filter(is_selected=True)
+            endpoints = Endpoint.objects.filter(traffic_id=self.traffic.id)
+            if self.traffic.test_environment == "dev":
+                endpoints = endpoints.filter(is_selected=True)
             for endpoint in endpoints:
                 subnet = endpoint.network.subnets.first()
                 if subnet.subnet_name not in subnet_endpoints_map:

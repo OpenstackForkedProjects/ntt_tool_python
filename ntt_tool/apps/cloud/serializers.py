@@ -92,8 +92,11 @@ class TestRunSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TestRun
+        depth = 1
 
 
 class TestRunListSerializer(serializers.ModelSerializer):
+    traffic_name = serializers.CharField(source='traffic.name', read_only=True)
+
     class Meta:
         model = TestRun

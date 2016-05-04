@@ -54,7 +54,6 @@ class LaunchEndpoints(NovaClientUtils):
 
     def launch_endpoints(self, request, traffic):
         endpoints = []
-
         with transaction.atomic():
             Network.objects.filter(tenant__traffic_id=traffic.id).update(is_selected=False)
             for selected_network in json.loads(request.data.get("json", '[]')):
