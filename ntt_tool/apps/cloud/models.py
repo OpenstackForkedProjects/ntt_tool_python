@@ -37,6 +37,7 @@ class Traffic(models.Model):
     remote_user = models.CharField(max_length=100)
     remote_pass = models.CharField(max_length=100)
     test_method = models.CharField(max_length=100)
+    udp_datagram_size = models.IntegerField(default=1)
     iperf_duration = models.IntegerField()
     test_type = models.CharField(max_length=20, choices=TYPE_CHOICES, default='all')
     external_host = models.CharField(max_length=100, blank=True, null=True)
@@ -156,8 +157,8 @@ class UDPTestResults(models.Model):
     bandwidth_loss_percent = models.CharField(max_length=20)
     interval_time = models.CharField(max_length=20)
     transferred = models.CharField(max_length=20)
-    loss_datagram = models.IntegerField()
-    total_datagram = models.IntegerField()
+    loss_datagram = models.CharField(max_length=20)
+    total_datagram = models.CharField(max_length=20)
 
     def __unicode__(self):
         return "%s | TestRun: %s" % (self.id, self.traffic_test_run.id)

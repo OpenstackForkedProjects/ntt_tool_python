@@ -141,6 +141,10 @@ class TrafficViewSet(viewsets.ModelViewSet):
         msg.send()
         return Response(True)
 
+    @list_route(methods=["delete"], url_path="report/delete/(?P<test_run_id>[-\w]+)")
+    def delete_report(self, request, test_run_id=None):
+        TestRun.objects.get(pk=test_run_id).delete()
+        return Response(True)
 
 class TenantViewSet(viewsets.ModelViewSet):
     queryset = Tenant.objects.all()

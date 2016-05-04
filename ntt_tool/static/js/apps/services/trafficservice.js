@@ -37,7 +37,11 @@ nttApp.service('trafficService', function(dataService){
     
     this.emailReport = function (pk) {
         return dataService.get('/api/traffic/' + pk + '/email/report/');
-    }
+    };
+    
+    this.deleteReport = function (testRunId) {
+        return dataService.delete('/api/traffic/report/delete/' + testRunId + '/')  
+    };
 });
 
 

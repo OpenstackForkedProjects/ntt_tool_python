@@ -235,7 +235,13 @@ nttApp.controller('TrafficViewCtrl', function($scope, $routeParams, trafficServi
     };
 
 
-
+    $scope.deleteReport = function ($index, testRunId) {
+        if(confirm("Are you sure want to delete?")) {
+            trafficService.deleteReport(testRunId).then(function (response) {
+                $scope.reports.splice($index, 1);
+            });
+        }
+    };
 
 
     // $scope.emailReport = function () {

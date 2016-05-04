@@ -148,7 +148,8 @@ class TrafficTest(object):
             'remote_pass': self.traffic.remote_pass,
             'test_method': self.traffic.test_method.split(','),
             'iperf_duration': self.traffic.iperf_duration,
-            'type': self.traffic.test_type
+            'type': self.traffic.test_type,
+            'udp_datagram_size': self.traffic.udp_datagram_size,
         }
         setup_config['tenants'] = {'tenants': []}
         setup_config['tenant_ssh_gateway'] = {}

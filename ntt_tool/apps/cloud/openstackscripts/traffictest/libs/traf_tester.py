@@ -174,9 +174,9 @@ def test_udp(environment, config, server, endpoints, contract, timestamp):
                 if dest_ep == env.host_string:
                     print dest_ep
 
-                    sudo("iperf3 -c %s -u -t %s -p 5202 > udptesttrafficclient-%s-%s-%s.txt 2>&1 &" %
+                    sudo("iperf3 -c %s -u -n %sm -b 10m -p 5202 > udptesttrafficclient-%s-%s-%s.txt 2>&1 &" %
                          (server,
-                          config['traffic']['iperf_duration'],
+                          config.get("traffic", {}).get("udp_datagram_size", 1),
                           env.host_string.replace('.', '_'),
                           server.replace('.', '_'),
                           timestamp),

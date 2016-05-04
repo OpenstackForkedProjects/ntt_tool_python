@@ -8,10 +8,19 @@
             </div>
             <div class="modal-body">
                 <form name="cloudTrafficForm">
-                    <div class="col-md-12">
+                    <div class="col-md-6">
                         <div class="form-group">
                             <label>Name</label><span> * </span>
                             <input type="text" class="form-control" id="name" ng-model="traffic.name" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Test Environment</label>
+                            <select class="form-control" ng-model="traffic.test_environment">
+                                <option value="dev">Dev/Testing</option>
+                                <option value="prod">Production</option>
+                             </select>
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -31,7 +40,11 @@
                         <div class="form-group">
                             <label>Allowed Delta Percentage</label>
                             <div class="input-group">
-                                <input type="number" class="form-control" id="allowed_delta_percentage" ng-model="traffic.allowed_delta_percentage" required aria-describedby="allowed-delta-percentage">
+                                <input type="number" class="form-control" id="allowed_delta_percentage"
+                                       min="1"
+                                       ng-model="traffic.allowed_delta_percentage"
+                                       aria-describedby="allowed-delta-percentage"
+                                       required />
                                 <span class="input-group-addon" id="allowed-delta-percentage">%</span>
                             </div>
                         </div>
@@ -40,7 +53,11 @@
                         <div class="form-group">
                             <label>IPERF Duration</label>
                             <div class="input-group">
-                                <input type="number" class="form-control" id="iperf_duration" ng-model="traffic.iperf_duration" required aria-describedby="iperf-duration">
+                                <input type="number" class="form-control" id="iperf_duration"
+                                       min="1"
+                                       ng-model="traffic.iperf_duration"
+                                       aria-describedby="iperf-duration"
+                                       required />
                                 <span class="input-group-addon" id="iperf-duration">sec</span>
                             </div>
                         </div>
@@ -48,7 +65,10 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>Number Of Workers</label>
-                            <input type="number" class="form-control" id="number_of_workers" ng-model="traffic.number_of_workers" required>
+                            <input type="number" class="form-control" id="number_of_workers"
+                                   min="1"
+                                   ng-model="traffic.number_of_workers"
+                                   required />
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -57,7 +77,6 @@
                             <input type="text" class="form-control" id="test_result_path" ng-model="traffic.test_result_path" required>
                         </div>
                     </div>
-
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>Test Method</label>
@@ -67,6 +86,20 @@
                                 <label class="btn btn-default" ng-model="traffic.test_method.tcp" uib-btn-checkbox>TCP</label>
                                 <label class="btn btn-default" ng-model="traffic.test_method.udp" uib-btn-checkbox>UDP</label>
                             </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>UDP Datagram Size</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="udp_datagram_size"
+                                       min="1"
+                                       ng-model="traffic.udp_datagram_size"
+                                       ng-required="traffic.test_method.udp"
+                                       ng-disabled="!traffic.test_method.udp"/>
+                                <span class="input-group-addon">Mb</span>
+                            </div>
+
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -89,15 +122,7 @@
                         </div>
                     </div>
 
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label>Test Environment</label>
-                            <select class="form-control" ng-model="traffic.test_environment">
-                                <option value="dev">Dev/Testing</option>
-                                <option value="prod">Production</option>
-                             </select>
-                        </div>
-                    </div>
+
                 </form>
             </div>
             <div class="modal-footer">
