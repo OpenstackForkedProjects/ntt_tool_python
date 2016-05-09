@@ -234,11 +234,13 @@
                             <th class="col-md-1">Destination Endpoints</th>
                             <th class="col-md-1">Jitter</th>
                             <th class="col-md-1">Bandwidth</th>
-                            <th class="col-md-1">Bandwidth Loss %</th>
+                            <th class="col-md-1">Loss Bandwidth</th>
                             <th class="col-md-1">Interval Time</th>
-                            <th>Transferred</th>
-                            <th class="col-md-1">Loss Datagrams</th>
-                            <th>Total Datagrams</th>
+                            <th>Bytes Transferred</th>
+                            <th class="col-md-1">Datagrams</th>
+                            <th>Loss Datagrams</th>
+                            <th>CPU Utilization at Source</th>
+                            <th>CPU Utilization at Destination</th>
                             <th class="col-md-1">Status</th>
                         </tr>
                         <tr ng-repeat="res in report.udp_test_results">
@@ -247,12 +249,14 @@
                             <td>{$ res.src_ep $}</td>
                             <td>{$ res.dest_ep $}</td>
                             <td>{$ res.jitter $}</td>
-                            <td>{$ res.bandwidth $}</td>
-                            <td>{$ res.bandwidth_loss_percent $}</td>
-                            <td>{$ res.interval_time $}</td>
-                            <td>{$ res.transferred $}</td>
-                            <td>{$ res.loss_datagram $}</td>
-                            <td>{$ res.total_datagram $}</td>
+                            <td>{$ res.bandwidth $} {$ res.bandwidth_units $}</td>
+                            <td>{$ res.bandwidth_loss $} {$ res.bandwidth_units $}</td>
+                            <td>{$ res.interval_time_start $} - {$ res.interval_time_end $} {$ res.interval_time_units $}</td>
+                            <td>{$ res.bytes_transferred $} {$ res.bytes_transferred_units $}</td>
+                            <td>{$ res.datagrams $}</td>
+                            <td>{$ res.loss_datagrams $}</td>
+                            <td>{$ res.cpu_utilization_src $}</td>
+                            <td>{$ res.cpu_utilization_dest $}</td>
                             <td>{$ res.status $}</td>
                         </tr>
                     </table>
@@ -331,7 +335,7 @@
 
 <!-- view report modal -->
 <div class="modal fade" id="viewReportModal" tabindex="-1" role="dialog" aria-labelledby="viewReportModalLabel">
-    <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-dialog modal-xxl" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -388,11 +392,13 @@
                             <th class="col-md-1">Destination Endpoints</th>
                             <th class="col-md-1">Jitter</th>
                             <th class="col-md-1">Bandwidth</th>
-                            <th class="col-md-1">Bandwidth Loss %</th>
+                            <th class="col-md-1">Loss Bandwidth</th>
                             <th class="col-md-1">Interval Time</th>
-                            <th>Transferred</th>
-                            <th class="col-md-1">Loss Datagrams</th>
-                            <th>Total Datagrams</th>
+                            <th>Bytes Transferred</th>
+                            <th class="col-md-1">Datagrams</th>
+                            <th>Loss Datagrams</th>
+                            <th>CPU Utilization at Source</th>
+                            <th>CPU Utilization at Destination</th>
                             <th class="col-md-1">Status</th>
                         </tr>
                         <tr ng-repeat="res in report.udp_test_results">
@@ -401,12 +407,14 @@
                             <td>{$ res.src_ep $}</td>
                             <td>{$ res.dest_ep $}</td>
                             <td>{$ res.jitter $}</td>
-                            <td>{$ res.bandwidth $}</td>
-                            <td>{$ res.bandwidth_loss_percent $}</td>
-                            <td>{$ res.interval_time $}</td>
-                            <td>{$ res.transferred $}</td>
-                            <td>{$ res.loss_datagram $}</td>
-                            <td>{$ res.total_datagram $}</td>
+                            <td>{$ res.bandwidth $} {$ res.bandwidth_units $}</td>
+                            <td>{$ res.bandwidth_loss $} {$ res.bandwidth_units $}</td>
+                            <td>{$ res.interval_time_start $} - {$ res.interval_time_end $} {$ res.interval_time_units $}</td>
+                            <td>{$ res.bytes_transferred $} {$ res.bytes_transferred_units $}</td>
+                            <td>{$ res.datagrams $}</td>
+                            <td>{$ res.loss_datagrams $}</td>
+                            <td>{$ res.cpu_utilization_src $}</td>
+                            <td>{$ res.cpu_utilization_dest $}</td>
                             <td>{$ res.status $}</td>
                         </tr>
                     </table>

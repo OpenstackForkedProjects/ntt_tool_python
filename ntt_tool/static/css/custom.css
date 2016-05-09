@@ -133,6 +133,10 @@ td > a{
         width: 90%;
         max-width:1200px;
   }
+  .modal-xxl {
+    width: 90%;
+    max-width: 1400px;
+  }
 }
 /* widgets */
 .card {

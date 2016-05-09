@@ -2,17 +2,17 @@
 <head>
 <style>
     @page {
-        size: a4 portrait;
+        size: a4 landscape;
         @frame header_frame {
             -pdf-frame-content: header_content;
-            left: 50pt; width: 512pt; top: 50pt; height: 40pt;
+            left: 50pt; width: 750pt; top: 50pt; height: 40pt;
         }
         @frame content_frame {
-            left: 50pt; width: 512pt; top: 90pt; height: 632pt;
+            left: 50pt; width: 750pt; top: 90pt; height: 632pt;
         }
         @frame footer_frame {
             -pdf-frame-content: footer_content;
-            left: 50pt; width: 512pt; top: 772pt; height: 20pt;
+            left: 50pt; width: 750pt; top: 772pt; height: 20pt;
         }
     }
 
@@ -122,11 +122,13 @@
             <th style="width:20%">Destination Endpoints</th>
             <th>Jitter</th>
             <th>Bandwidth</th>
-            <th>Bandwidth Loss %</th>
+            <th>Loss Bandwidth</th>
             <th>Interval Time</th>
-            <th>Transferred</th>
+            <th>Bytes Transferred</th>
+            <th>Datagrams</th>
             <th>Loss Datagrams</th>
-            <th>Total Datagrams</th>
+            <th>CPU Utilization at Source</th>
+            <th>CPU Utilization at Destination</th>
             <th style="width:15%">Status</th>
         </tr>
         {% for res in data.udp_test_results %}
@@ -136,12 +138,14 @@
             <td>{{ res.src_ep }}</td>
             <td>{{ res.dest_ep }}</td>
             <td>{{ res.jitter }}</td>
-            <td>{{ res.bandwidth }}</td>
-            <td>{{ res.bandwidth_loss_percent }}</td>
-            <td>{{ res.interval_time }}</td>
-            <td>{{ res.transferred }}</td>
-            <td>{{ res.loss_datagram }}</td>
-            <td>{{ res.total_datagram }}</td>
+            <td>{{ res.bandwidth }} {{ res.bandwidth_units }}</td>
+            <td>{{ res.bandwidth_loss }} {{ res.bandwidth_units }}</td>
+            <td>{{ res.interval_time_start }} - {{ res.interval_time_end }} {{ res.interval_time_units }} </td>
+            <td>{{ res.bytes_transferred }} {{ res.bytes_transferred_units }}</td>
+            <td>{{ res.datagrams }}</td>
+            <td>{{ res.loss_datagrams }}</td>
+            <td>{{ res.cpu_utilization_src }}</td>
+            <td>{{ res.cpu_utilization_dest }}</td>
             <td>{{ res.status }}</td>
         </tr>
         {% endfor %}

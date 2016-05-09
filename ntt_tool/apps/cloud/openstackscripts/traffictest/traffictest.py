@@ -36,16 +36,19 @@ class TrafficTest(object):
                         udp_res_obj.traffic_test_run = test_run
                         udp_res_obj.src_tenant = udp_test_result.get('src_tenant')[0]
                         udp_res_obj.dest_tenant = udp_test_result.get('dest_tenant')[0]
-                        udp_res_obj.src_ep = udp_test_result.get('src_ep')
-                        udp_res_obj.dest_ep = udp_test_result.get('dest_ep')
+                        udp_res_obj.src_ep = udp_test_result.get('src_endpoints')[0]
+                        udp_res_obj.dest_ep = udp_test_result.get('dest_endpoints')[0]
                         udp_res_obj.status = udp_test_result.get('status')
                         udp_res_obj.jitter = udp_test_result.get('jitter')
                         udp_res_obj.bandwidth = udp_test_result.get('bandwidth')
-                        udp_res_obj.bandwidth_loss_percent = udp_test_result.get('bandwidth_loss_percent')
-                        udp_res_obj.interval_time = udp_test_result.get('interval_time')
-                        udp_res_obj.transferred = udp_test_result.get('transferred')
-                        udp_res_obj.loss_datagram = udp_test_result.get('loss_datagram')
-                        udp_res_obj.total_datagram = udp_test_result.get('total_datagram')
+                        udp_res_obj.bandwidth_loss = udp_test_result.get('bandwidth_loss')
+                        udp_res_obj.interval_time_start = udp_test_result.get('interval_time_start')
+                        udp_res_obj.interval_time_end = udp_test_result.get('interval_time_end')
+                        udp_res_obj.bytes_transferred = udp_test_result.get('bytes_transferred')
+                        udp_res_obj.datagrams = udp_test_result.get('datagrams')
+                        udp_res_obj.loss_datagrams = udp_test_result.get('loss_datagrams')
+                        udp_res_obj.cpu_utilization_src = udp_test_result.get('cpu_utilization_src')
+                        udp_res_obj.cpu_utilization_dest = udp_test_result.get('cpu_utilization_dest')
                         udp_res_obj.save()
                 elif test_method == "icmp":
                     for icmp_test_result in results:
