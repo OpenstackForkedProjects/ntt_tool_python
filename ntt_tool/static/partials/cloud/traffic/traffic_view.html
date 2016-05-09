@@ -147,7 +147,7 @@
                         <span ng-show="report.status == 'completed'">
                             <a href ng-click="viewReport(report.id)"><i class="fa fa-eye fa-fw" data-toggle="modal" data-target="#viewReportModal"></i></a>
                             <a href ng-click="downloadReport(report.id, report.traffic_name)"><i class="fa fa-download fa-fw"></i></a>
-                            <a href><i class="fa fa-envelope fa-fw"></i></a>
+                            <a href ng-click="emailReport(report.id)"><i class="fa fa-envelope fa-fw"></i></a>
                         </span>
                         <a href ng-click="deleteReport($index, report.id)"><i class="fa fa-trash fa-fw"></i></a>
                     </td>

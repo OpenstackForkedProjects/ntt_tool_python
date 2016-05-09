@@ -1,17 +1,14 @@
 import json
-import cStringIO as StringIO
 from django.http import HttpResponse
-from django.template import Context
 from django.template.loader import get_template
-from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.decorators import list_route, detail_route
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
-from xhtml2pdf import pisa
-from models import *
+from ntt_tool.utils.reportutils import render_to_pdf
 from serializers import *
+
 from openstackscripts.keystoneclientutils import KeystoneClientUtils
 from openstackscripts.neutronclientutils import NeutronClientUtils
 from openstackscripts.tenantnetworkdiscovery import *
@@ -110,41 +107,31 @@ class TrafficViewSet(viewsets.ModelViewSet):
     def download_report(self, request, test_run_id=None):
         test_run = TestRun.objects.get(pk=test_run_id)
         serializer = TestRunSerializer(test_run)
+        pdf = render_to_pdf('reports/traffic_test_report.html', serializer.data)
+        return HttpResponse(pdf.getvalue(), content_type='application/pdf')
 
-        template = get_template('reports/traffic_test_report.html')
-        context = Context({'data': serializer.data})
-        html = template.render(context)
-        result = StringIO.StringIO()
-        pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("ISO-8859-1")), result)
-        return HttpResponse(result.getvalue(), content_type='application/pdf')
+    @list_route(methods=['get'], url_path='report/email/(?P<test_run_id>[-\w]+)')
+    def email_report(self, request, test_run_id=None):
+        test_run = TestRun.objects.get(pk=test_run_id)
+        serializer = TestRunSerializer(test_run)
+        pdf = render_to_pdf('reports/traffic_test_report.html', serializer.data)
 
-    @detail_route(methods=['get'], url_path='email/report')
-    def email_report(self, request, pk=None):
-        context = None
-        file_path = os.path.join(settings.MEDIA_ROOT, 'traffic-test-report.txt')
-        with open(file_path, 'r') as f:
-            test_result = pickle.load(f)  # load file content as mydict
-            context = Context({
-                'test_result': test_result,
-                'reciever_name': request.user.username,
-            })
-
-        sender = settings.EMAIL_HOST_USER
-        message = get_template('email_templates/traffic_test_report.html').render(context)
-        msg = EmailMessage("Traffic Test Report", message, to=['abdulgaffar@onecloudinc.com', request.user.email], from_email=sender)
-        msg.content_subtype = 'html'
-
-        f = file(file_path, 'rb')
-        attachment = MIMEText(f.read())
-        attachment.add_header('Content-Disposition', 'attachment', filename="traffic-test-report.txt")
-        msg.attach(attachment)
-        msg.send()
+        context = {"user_full_name": request.user.get_full_name()}
+        email_content = get_template('email_templates/traffic_test_report.html').render(context)
+        mail = EmailMessage("Traffic Test Report",
+                            email_content,
+                            to=['abdulgaffar@onecloudinc.com', request.user.email, 'keerthiv@onecloudinc.com'],
+                            from_email=settings.EMAIL_HOST_USER)
+        mail.content_subtype = 'html'
+        mail.attach("report.pdf", pdf.getvalue(), 'application/pdf')
+        mail.send()
         return Response(True)
 
     @list_route(methods=["delete"], url_path="report/delete/(?P<test_run_id>[-\w]+)")
     def delete_report(self, request, test_run_id=None):
         TestRun.objects.get(pk=test_run_id).delete()
         return Response(True)
+
 
 class TenantViewSet(viewsets.ModelViewSet):
     queryset = Tenant.objects.all()

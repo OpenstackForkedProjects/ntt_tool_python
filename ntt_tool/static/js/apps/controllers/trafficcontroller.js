@@ -244,9 +244,9 @@ nttApp.controller('TrafficViewCtrl', function($scope, $routeParams, trafficServi
     };
 
 
-    // $scope.emailReport = function () {
-    //     trafficService.emailReport($scope.traffic.id).then(function (response) {
-    //         console.log(response)
-    //     });
-    // }
+    $scope.emailReport = function (testRunId) {
+        trafficService.emailReport(testRunId).then(function (response) {
+            console.log(response)
+        });
+    }
 });

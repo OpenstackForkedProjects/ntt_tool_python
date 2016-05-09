@@ -31,16 +31,12 @@ nttApp.service('trafficService', function(dataService){
         return dataService.get('/api/traffic/' + pk + '/run/test/?duration='+testDuration);
     };
     
-    this.downloadReport = function (testRunId) {
-        return dataService.get('/api/traffic/report/download/' + testRunId + '/');
-    };
-    
-    this.emailReport = function (pk) {
-        return dataService.get('/api/traffic/' + pk + '/email/report/');
+    this.emailReport = function (testRunId) {
+        return dataService.get('/api/traffic/report/email/' + testRunId + '/');
     };
     
     this.deleteReport = function (testRunId) {
-        return dataService.delete('/api/traffic/report/delete/' + testRunId + '/')  
+        return dataService.delete('/api/traffic/report/delete/' + testRunId + '/');
     };
 });
 

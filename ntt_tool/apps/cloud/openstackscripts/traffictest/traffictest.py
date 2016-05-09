@@ -21,6 +21,7 @@ class TrafficTest(object):
         try:
             endpoints_list = self.generate_endpoints_contract_list()
             setup_config = self.generate_setup_config()
+
             traf_tester.start_task(setup_config, endpoints_list, "start", "_".join(self.traffic.name.split()))
             time.sleep(60 * duration)
             test_results = traf_tester.start_task(setup_config, endpoints_list, "stop", "_".join(self.traffic.name.split()))

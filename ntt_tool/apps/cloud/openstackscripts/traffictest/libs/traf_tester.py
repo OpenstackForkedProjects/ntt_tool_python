@@ -172,16 +172,13 @@ def test_udp(environment, config, server, endpoints, contract, timestamp):
             print "UDP client execution"
             for dest_ep in endpoints:
                 if dest_ep == env.host_string:
-                    print dest_ep
-
                     sudo("iperf3 -c %s -u -n %sm -b 10m -p 5202 > udptesttrafficclient-%s-%s-%s.txt 2>&1 &" %
                          (server,
                           config.get("traffic", {}).get("udp_datagram_size", 1),
                           env.host_string.replace('.', '_'),
                           server.replace('.', '_'),
                           timestamp),
-                         pty=False)
-
+                          pty=False)
     except SystemExit, e:
         logger.warn("Exception while executing task: %s", str(e))
 
@@ -207,7 +204,6 @@ def stop_traffic(environment, endpoints, timestamp):
         return output
     except SystemExit, e:
         logger.warn("Exception while executing task: %s", str(e))
-
 
 
 @task
@@ -327,6 +323,11 @@ def format_tcp_test_results(data):
 
 
 def format_udp_test_results(data):
+
+    print "*"*100
+    print "data --> ", data
+
+
     test_results = []
     status = None
     dest_ep_regex = ".*-*-(?P<dest_ip>[0-9]+_[0-9]+_[0-9]+_[0-9]+)-.*"
