@@ -4,13 +4,11 @@
     <div class="row">
         <div class="col-md-12">
             <div class="page-header">
-                <a href="#/cloud/add/" class="btn btn-primary pull-right">
-                   <i class="fa fa-plus-circle fa-fw"></i> Add Cloud
-                </a>
+                <button type="button" class="btn btn-primary btn-sm pull-right" data-toggle="modal" data-target="#cloudFormModal" ng-click="addCloud()"> <i class="fa fa-plus-circle fa-fw"></i> Add Cloud </button>
                 <h1><i class="fa fa-cloud fa-fw"></i> Clouds</h1>
             </div>
 
-            <table class="table table-bordered bg-white" ng-show="cloudList.length > 0">
+            <table class="table table-bordered table-hover bg-white" ng-show="cloudList.length > 0">
                 <tr>
                     <th>Name</th>
                     <th>Keystone Auth URL</th>
@@ -20,13 +18,13 @@
                     <th>Actions</th>
                 </tr>
                 <tr ng-repeat="cloud in cloudList">
-                    <td><a href="#/cloud/view/{$ cloud.id $}/">{$ cloud.name $}</a></td>
+                    <td><a href="#/cloud/view/{$ cloud.id $}/" class="text-primary underline">{$ cloud.name $}</a></td>
                     <td>{$ cloud.keystone_auth_url $}</td>
                     <td>{$ cloud.keystone_user $}</td>
                     <td>{$ cloud.keystone_tenant_name $}</td>
                     <td>{$ cloud.created_on | date:"MM/dd/yyyy hh:mm a" $}</td>
-                    <td>
-                        <a href="#/cloud/edit/{$ cloud.id $}/" class="text-info"><i class="fa fa-edit fa-fw"></i></a>
+                    <td class="text-center">
+                        <a href class="text-info" data-toggle="modal" data-target="#cloudFormModal" ng-click="editCloud($index)"> <i class="fa fa-edit fa-fw"></i></a>
                         <a href class="text-danger" ng-click="delete($index)"><i class="fa fa-trash-o fa-fw"></i></a>
                     </td>
                 </tr>
@@ -36,3 +34,6 @@
         </div>
     </div>
 </div>
+
+
+<ng-include src="'/static/partials/cloud/cloud_form.html'"></ng-include>

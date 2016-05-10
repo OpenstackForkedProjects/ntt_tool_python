@@ -20,8 +20,6 @@ NOVA_VM_FLAVOR_DISK = 10    # In Giga Bytes
 
 
 # GLANCE CONFIGS
-GLANCE_ENDPOINT = "http://172.168.2.40:9292"
-
 GLANCE_IMAGE_NAME = NOVA_IMAGE_NAME
 GLANCE_IMAGE_PATH = os.path.join(settings.MEDIA_ROOT, os.path.join("osimages", "ubuntu.img"))
 GLANCE_IMAGE_DISK_FORMAT = "qcow2"

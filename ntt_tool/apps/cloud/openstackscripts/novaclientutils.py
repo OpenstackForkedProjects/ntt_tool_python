@@ -1,5 +1,6 @@
 import time
 import os
+from urlparse import urlparse
 from novaclient.v1_1 import client as nova_client
 from novaclient.exceptions import NotFound
 from openstackclientutils import OpenStackClientUtils
@@ -54,8 +55,9 @@ class NovaClientUtils(OpenStackClientUtils):
                 "tenant_name": self.credentials.get("project_id")
             }
             keystone = KeystoneClientUtils(**keystone_credentials)
-            # ToDo: GLANCE_ENDPOINT is hardcoded. Image will not upload if we select diff network
-            glance = GlanceClientUtils(endpoint=GLANCE_ENDPOINT,
+            url = urlparse(self.credentials.get("auth_url"))
+            glance_endpoint_url = "%s://%s:9292" % (url.scheme, url.hostname)
+            glance = GlanceClientUtils(endpoint=glance_endpoint_url,
                                        token=keystone.get_token())
             image = glance.upload_image()
 

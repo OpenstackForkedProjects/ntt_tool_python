@@ -79,6 +79,10 @@ td > a{
     border: none !important;
 }
 
+.underline{
+    text-decoration: underline;
+}
+
 .no-margin-bottom {
     margin-bottom: 0;
 }
@@ -130,8 +134,8 @@ td > a{
 }
 @media (min-width: 768px) {
   .modal-xl {
-        width: 90%;
-        max-width:1200px;
+        width: 95%;
+        max-width:1300px;
   }
   .modal-xxl {
     width: 90%;

@@ -224,6 +224,38 @@
                     </tr>
                 </table>
 
+                <div class="panel panel-default" ng-if="report.icmp_test_results.length > 0">
+                    <div class="panel-heading">ICMP Test Results</div>
+                    <table class="table table-bordered">
+                        <tr>
+                            <th class="col-md-1">Source Tenant</th>
+                            <th class="col-md-1">Destination Tenant</th>
+                            <th class="col-md-1">Source Endpoints</th>
+                            <th class="col-md-1">Destination Endpoints</th>
+                            <th>rtt min</th>
+                            <th>rtt max</th>
+                            <th>rtt avg</th>
+                            <th>Packets Recieved</th>
+                            <th>Packets Transmitted</th>
+                            <th>Packets Loss Percetage</th>
+                            <th class="col-md-1">Status</th>
+                        </tr>
+                        <tr ng-repeat="res in report.icmp_test_results">
+                            <td>{$ res.src_tenant $}</td>
+                            <td>{$ res.dest_tenant $}</td>
+                            <td>{$ res.src_ep $}</td>
+                            <td>{$ res.dest_ep $}</td>
+                            <td>{$ res.rtt_min $}</td>
+                            <td>{$ res.rtt_max $}</td>
+                            <td>{$ res.rtt_avg $}</td>
+                            <td>{$ res.packets_received $}</td>
+                            <td>{$ res.packets_transmitted $}</td>
+                            <td>{$ res.packet_loss_percent $}</td>
+                            <td>{$ res.status $}</td>
+                        </tr>
+                    </table>
+                </div>
+
                 <div class="panel panel-default" ng-if="report.udp_test_results.length > 0">
                     <div class="panel-heading">UDP Test Results</div>
                     <table class="table table-bordered">
@@ -262,38 +294,6 @@
                     </table>
                 </div>
 
-                <div class="panel panel-default" ng-if="report.icmp_test_results.length > 0">
-                    <div class="panel-heading">ICMP Test Results</div>
-                    <table class="table table-bordered">
-                        <tr>
-                            <th class="col-md-1">Source Tenant</th>
-                            <th class="col-md-1">Destination Tenant</th>
-                            <th class="col-md-1">Source Endpoints</th>
-                            <th class="col-md-1">Destination Endpoints</th>
-                            <th>rtt min</th>
-                            <th>rtt max</th>
-                            <th>rtt avg</th>
-                            <th>Packets Recieved</th>
-                            <th>Packets Transmitted</th>
-                            <th>Packets Loss Percetage</th>
-                            <th class="col-md-1">Status</th>
-                        </tr>
-                        <tr ng-repeat="res in report.icmp_test_results">
-                            <td>{$ res.src_tenant $}</td>
-                            <td>{$ res.dest_tenant $}</td>
-                            <td>{$ res.src_ep $}</td>
-                            <td>{$ res.dest_ep $}</td>
-                            <td>{$ res.rtt_min $}</td>
-                            <td>{$ res.rtt_max $}</td>
-                            <td>{$ res.rtt_avg $}</td>
-                            <td>{$ res.packets_received $}</td>
-                            <td>{$ res.packets_transmitted $}</td>
-                            <td>{$ res.packet_loss_percent $}</td>
-                            <td>{$ res.status $}</td>
-                        </tr>
-                    </table>
-                </div>
-
                 <div class="panel panel-default" ng-if="report.tcp_test_results.length > 0">
                     <div class="panel-heading">TCP Test Results</div>
                     <table class="table table-bordered">
@@ -302,10 +302,12 @@
                             <th class="col-md-1">Destination Tenant</th>
                             <th class="col-md-1">Source Endpoints</th>
                             <th class="col-md-1">Destination Endpoints</th>
-                            <th>retr</th>
+                            <th>Retransmits</th>
                             <th>Bandwidth</th>
                             <th>Interval Time</th>
                             <th>Transferred</th>
+                            <th class="col-md-1">CPU Utilization at Source</th>
+                            <th class="col-md-1">CPU Utilization at Destination</th>
                             <th class="col-md-1">Status</th>
                         </tr>
                         <tr ng-repeat="res in report.tcp_test_results">
@@ -313,10 +315,12 @@
                             <td>{$ res.dest_tenant $}</td>
                             <td>{$ res.src_ep $}</td>
                             <td>{$ res.dest_ep $}</td>
-                            <td>{$ res.retr $}</td>
-                            <td>{$ res.bandwidth $}</td>
-                            <td>{$ res.interval_time $}</td>
-                            <td>{$ res.transferred $}</td>
+                            <td>{$ res.retransmits $}</td>
+                            <td>{$ res.bandwidth $} {$ res.bandwidth_units $}</td>
+                            <td>{$ res.interval_time_start $} - {$ res.interval_time_end $} {$ res.interval_time_units $}</td>
+                            <td>{$ res.bytes_transferred $} {$ res.bytes_transferred_units $}</td>
+                            <td>{$ res.cpu_utilization_src $}</td>
+                            <td>{$ res.cpu_utilization_dest $}</td>
                             <td>{$ res.status $}</td>
                         </tr>
                     </table>
@@ -382,6 +386,38 @@
                     </tr>
                 </table>
 
+                <div class="panel panel-default" ng-if="report.icmp_test_results.length > 0">
+                    <div class="panel-heading">ICMP Test Results</div>
+                    <table class="table table-bordered">
+                        <tr>
+                            <th class="col-md-1">Source Tenant</th>
+                            <th class="col-md-1">Destination Tenant</th>
+                            <th class="col-md-1">Source Endpoints</th>
+                            <th class="col-md-1">Destination Endpoints</th>
+                            <th>rtt min</th>
+                            <th>rtt max</th>
+                            <th>rtt avg</th>
+                            <th>Packets Recieved</th>
+                            <th>Packets Transmitted</th>
+                            <th>Packets Loss Percetage</th>
+                            <th class="col-md-1">Status</th>
+                        </tr>
+                        <tr ng-repeat="res in report.icmp_test_results">
+                            <td>{$ res.src_tenant $}</td>
+                            <td>{$ res.dest_tenant $}</td>
+                            <td>{$ res.src_ep $}</td>
+                            <td>{$ res.dest_ep $}</td>
+                            <td>{$ res.rtt_min $}</td>
+                            <td>{$ res.rtt_max $}</td>
+                            <td>{$ res.rtt_avg $}</td>
+                            <td>{$ res.packets_received $}</td>
+                            <td>{$ res.packets_transmitted $}</td>
+                            <td>{$ res.packet_loss_percent $}</td>
+                            <td>{$ res.status $}</td>
+                        </tr>
+                    </table>
+                </div>
+
                 <div class="panel panel-default" ng-if="report.udp_test_results.length > 0">
                     <div class="panel-heading">UDP Test Results</div>
                     <table class="table table-bordered">
@@ -420,38 +456,6 @@
                     </table>
                 </div>
 
-                <div class="panel panel-default" ng-if="report.icmp_test_results.length > 0">
-                    <div class="panel-heading">ICMP Test Results</div>
-                    <table class="table table-bordered">
-                        <tr>
-                            <th class="col-md-1">Source Tenant</th>
-                            <th class="col-md-1">Destination Tenant</th>
-                            <th class="col-md-1">Source Endpoints</th>
-                            <th class="col-md-1">Destination Endpoints</th>
-                            <th>rtt min</th>
-                            <th>rtt max</th>
-                            <th>rtt avg</th>
-                            <th>Packets Recieved</th>
-                            <th>Packets Transmitted</th>
-                            <th>Packets Loss Percetage</th>
-                            <th class="col-md-1">Status</th>
-                        </tr>
-                        <tr ng-repeat="res in report.icmp_test_results">
-                            <td>{$ res.src_tenant $}</td>
-                            <td>{$ res.dest_tenant $}</td>
-                            <td>{$ res.src_ep $}</td>
-                            <td>{$ res.dest_ep $}</td>
-                            <td>{$ res.rtt_min $}</td>
-                            <td>{$ res.rtt_max $}</td>
-                            <td>{$ res.rtt_avg $}</td>
-                            <td>{$ res.packets_received $}</td>
-                            <td>{$ res.packets_transmitted $}</td>
-                            <td>{$ res.packet_loss_percent $}</td>
-                            <td>{$ res.status $}</td>
-                        </tr>
-                    </table>
-                </div>
-
                 <div class="panel panel-default" ng-if="report.tcp_test_results.length > 0">
                     <div class="panel-heading">TCP Test Results</div>
                     <table class="table table-bordered">
@@ -460,10 +464,12 @@
                             <th class="col-md-1">Destination Tenant</th>
                             <th class="col-md-1">Source Endpoints</th>
                             <th class="col-md-1">Destination Endpoints</th>
-                            <th>retr</th>
+                            <th>Retransmits</th>
                             <th>Bandwidth</th>
                             <th>Interval Time</th>
                             <th>Transferred</th>
+                            <th class="col-md-1">CPU Utilization at Source</th>
+                            <th class="col-md-1">CPU Utilization at Destination</th>
                             <th class="col-md-1">Status</th>
                         </tr>
                         <tr ng-repeat="res in report.tcp_test_results">
@@ -471,16 +477,19 @@
                             <td>{$ res.dest_tenant $}</td>
                             <td>{$ res.src_ep $}</td>
                             <td>{$ res.dest_ep $}</td>
-                            <td>{$ res.retr $}</td>
-                            <td>{$ res.bandwidth $}</td>
-                            <td>{$ res.interval_time $}</td>
-                            <td>{$ res.transferred $}</td>
+                            <td>{$ res.retransmits $}</td>
+                            <td>{$ res.bandwidth $} {$ res.bandwidth_units $}</td>
+                            <td>{$ res.interval_time_start $} - {$ res.interval_time_end $} {$ res.interval_time_units $}</td>
+                            <td>{$ res.bytes_transferred $} {$ res.bytes_transferred_units $}</td>
+                            <td>{$ res.cpu_utilization_src $}</td>
+                            <td>{$ res.cpu_utilization_dest $}</td>
                             <td>{$ res.status $}</td>
                         </tr>
                     </table>
                 </div>
             </div>
             <div class="modal-footer">
+                <button type="button" class="btn btn-primary" ng-click="downloadReport(report.id, report.traffic_name)"><i class="fa fa-download fa-fw"></i> Download</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
         </div>

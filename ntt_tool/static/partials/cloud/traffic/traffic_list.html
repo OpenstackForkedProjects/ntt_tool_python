@@ -1,5 +1,5 @@
 <div class="page-header">
-    <button type="button" class="btn btn-primary btn-sm pull-right" data-toggle="modal" data-target="#trafficFormModal" ng-click="createForm()"> <i class="fa fa-plus-circle fa-fw"></i> Add Traffic </button>
+    <button type="button" class="btn btn-primary btn-sm pull-right" data-toggle="modal" data-target="#trafficFormModal" ng-click="addTraffic()"> <i class="fa fa-plus-circle fa-fw"></i> Add Traffic </button>
     <h1>Traffic(s)</h1>
 </div>
 
@@ -29,7 +29,7 @@
         <td>{$ cloudTraffic.allowed_delta_percentage $} %</td>
         <td>{$ cloudTraffic.test_result_path $}</td>
         <td class="text-center">
-            <a href class="text-info" data-toggle="modal" data-target="#trafficFormModal" ng-click="updateForm($index)"> <i class="fa fa-edit fa-fw"></i></a>
+            <a href class="text-info" data-toggle="modal" data-target="#trafficFormModal" ng-click="editTraffic($index)"> <i class="fa fa-edit fa-fw"></i></a>
             <a href class="text-danger" ng-click="delete($index)"><i class="fa fa-trash-o fa-fw"></i></a></span>
         </td>
     </tr>

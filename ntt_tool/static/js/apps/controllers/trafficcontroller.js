@@ -13,18 +13,18 @@ nttApp.controller('TrafficListCtrl', function($scope, $routeParams, trafficServi
         }
     };
 
-    $scope.event = "Add";
+    $scope.eventType = "add";
     $scope.traffic = {};
-    $scope.createForm = function () {
-        $scope.event = "Add";
+    $scope.addTraffic = function () {
+        $scope.eventType = "add";
         $scope.traffic = {};
         $scope.traffic["cloud_id"] = $scope.cloudId;
         $scope.traffic["test_type"] = "intra-tenant";
         $scope.traffic["test_environment"] = "dev";
     };
 
-    $scope.updateForm = function ($index) {
-        $scope.event = "Edit";
+    $scope.editTraffic = function ($index) {
+        $scope.eventType = "edit";
         $scope.traffic = {};
         $scope.traffic = angular.copy($scope.trafficList[$index]);
         $scope.traffic["$index"] = $index;
@@ -41,7 +41,7 @@ nttApp.controller('TrafficListCtrl', function($scope, $routeParams, trafficServi
         var trafficObj = angular.copy($scope.traffic);
         trafficObj["test_method"] = selectedTestMethods.join();
 
-        if($scope.event == "Add") {
+        if($scope.eventType == "add") {
             trafficService.create(trafficObj).then(function (response) {
                 $scope.trafficList.push(response);
                 $("#trafficFormModal").modal('hide');

@@ -18,6 +18,9 @@ class TrafficTest(object):
         test_run.started_by = started_by
         test_run.save()
 
+        test_run.report_name = "%s_%s_%s" % (self.traffic.cloud.name, self.traffic.name, test_run.id)
+        test_run.save()
+
         try:
             endpoints_list = self.generate_endpoints_contract_list()
             setup_config = self.generate_setup_config()
@@ -72,12 +75,16 @@ class TrafficTest(object):
                         tcp_res_obj.traffic_test_run = test_run
                         tcp_res_obj.src_tenant = tcp_test_result.get('src_tenant')[0]
                         tcp_res_obj.dest_tenant = tcp_test_result.get('dest_tenant')[0]
-                        tcp_res_obj.src_ep = tcp_test_result.get('src_ep')
-                        tcp_res_obj.dest_ep = tcp_test_result.get('dest_ep')
-                        tcp_res_obj.retr = tcp_test_result.get('retr')
+                        tcp_res_obj.src_ep = tcp_test_result.get('src_endpoints')[0]
+                        tcp_res_obj.dest_ep = tcp_test_result.get('dest_endpoints')[0]
+                        tcp_res_obj.status = tcp_test_result.get('status')
+                        tcp_res_obj.retransmits = tcp_test_result.get('retransmits')
                         tcp_res_obj.bandwidth = tcp_test_result.get('bandwidth')
-                        tcp_res_obj.interval_time = tcp_test_result.get('interval_time')
-                        tcp_res_obj.transferred = tcp_test_result.get('transferred')
+                        tcp_res_obj.interval_time_start = tcp_test_result.get('interval_time_start')
+                        tcp_res_obj.interval_time_end = tcp_test_result.get('interval_time_end')
+                        tcp_res_obj.bytes_transferred = tcp_test_result.get('bytes_transferred')
+                        tcp_res_obj.cpu_utilization_src = tcp_test_result.get('cpu_utilization_src')
+                        tcp_res_obj.cpu_utilization_dest = tcp_test_result.get('cpu_utilization_dest')
                         tcp_res_obj.save()
         except Exception, e:
             test_run.status = "error"

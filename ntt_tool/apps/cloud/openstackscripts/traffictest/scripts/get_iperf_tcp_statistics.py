@@ -11,7 +11,7 @@ filedir = os.getcwd()
 def get_list_of_filenames():
     file_list = []
     for file in os.listdir(filedir):
-        if file.startswith("tcptesttrafficclient") and file.endswith("%s.txt" % (fileid)):
+        if file.startswith("tcptesttrafficclient") and file.endswith("%s.json" % (fileid)):
             file_list.append(file)
     return file_list
 
@@ -29,47 +29,26 @@ def get_test_results(file):
     (bandwidth_loss dict wth keys interval_time, transferred, bandwidth, 
      jitter, loss_datagram, total_datagram, loss_percent)
     """
-        
-    bandwidth_stats = \
-        {'interval_time': '',   # NOQA
-         'transferred': '',   # NOQA
-         'bandwidth': '',   # NOQA
-         'retr': ''}   # NOQA
-    reportflag = False
-    f = open(file, 'r')
-    for line in f:
-        if "- - " in line:
-            reportflag = True
-        if "[ ID]" in line and reportflag:
-            report = f.next()
-            report_data = report.split(']')[1].split('  ')
-            # also want packets transmitted, packets received, % packet loss
-            if str(report_data[2]) == 'sec':
-                interval_time = str(report_data[1]) + " " + str(report_data[2])
-                transferred = str(report_data[3])
-                bandwidth = str(report_data[4])
-                if report_data[5] == '':
-                    retr = str(report_data[5]) + str(report_data[6])   # NOQA
-                else:
-                    retr = str(report_data[5])
-            else:
-                interval_time = str(report_data[1])
-                transferred = str(report_data[2])
-                bandwidth = str(report_data[3])
-                if report_data[4] == '':
-                    retr = str(report_data[4]) + str(report_data[5])   # NOQA
-                else:
-                    retr = str(report_data[4])
-   
-            bandwidth_stats = \
-                {'interval_time': interval_time,   # NOQA
-                 'transferred': transferred,   # NOQA
-                 'bandwidth': bandwidth,   # NOQA
-                 'retr': retr}   # NOQA
-    
-    test_results = {'bandwidth_stats': bandwidth_stats}
 
-    return test_results
+    try:
+        with open(file, 'r') as f:
+            out = json.loads(f.read())
+            result = {}
+            result['src_endpoints'] = [x.get('local_host') for x in out.get('start', {}).get('connected', [])]
+            result['dest_endpoints'] = [x.get('remote_host') for x in out.get('start', {}).get('connected', [])]
+            result['retransmits'] = out.get("end", {}).get("sum_sent", {}).get("retransmits", 0)
+            result['bandwidth'] = out.get("end", {}).get("sum_sent", {}).get("bits_per_second", 0)
+            result['interval_time_start'] = out.get("end", {}).get("sum_sent", {}).get("start", 0)
+            result['interval_time_end'] = out.get("end", {}).get("sum_sent", {}).get("end", 0)
+            result['bytes_transferred'] = out.get("end", {}).get("sum_sent", {}).get("bytes", 0)
+            result['cpu_utilization_src'] = out.get("end", {}).get("cpu_utilization_percent", {}).get("host_total", 0)
+            result['cpu_utilization_dest'] = out.get("end", {}).get("cpu_utilization_percent", {}).get("remote_total", 0)
+            result['status'] = 'success'
+            return result
+    except IOError, e:
+        raise e
+    except Exception, e:
+        raise e
 
 
 def main():

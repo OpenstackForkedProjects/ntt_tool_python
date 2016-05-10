@@ -1,44 +1,43 @@
-<ng-include src="'/static/partials/common/header.html'"></ng-include>
-
-<div class="container">
-    <div class="row">
-        <div class="col-md-12">
-            <ol class="breadcrumb">
-                <li><a href="#/cloud/">Cloud List</a></li>
-                <li class="active">Add Cloud</li>
-            </ol>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="page-header">
-                <h1>{$ event | capitalize:true $} Cloud</h1>
-            </div>
-            <form role="form">
-                <div class="form-group">
-                    <label>Name *</label>
-                    <input type="text" class="form-control" id="name" ng-model="cloud.name" required />
+<!-- create/update traffic modal -->
+<div class="modal fade" id="cloudFormModal" tabindex="-1" role="dialog" aria-labelledby="cloudFormModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form role="form" name="cloudForm" ng-submit="save()">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="trafficFormModalLabel">{$ eventType | capitalize:true $} Cloud</h4>
                 </div>
-                <div class="form-group">
-                    <label>Keystone Auth URL *</label>
-                    <input type="url" class="form-control" id="keystone_auth_url" ng-model="cloud.keystone_auth_url" required />
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Name *</label>
+                        <input type="text" class="form-control" id="name" ng-model="cloud.name" required />
+                    </div>
+                    <div class="form-group">
+                        <label>Keystone Auth URL *</label>
+                        <input type="url" class="form-control" id="keystone_auth_url" ng-model="cloud.keystone_auth_url" required />
+                    </div>
+                    <div class="form-group">
+                        <label>Keystone User *</label>
+                        <input type="text" class="form-control" id="keystone_user" ng-model="cloud.keystone_user" required />
+                    </div>
+                    <div class="form-group">
+                        <label>Keystone Password *</label>
+                        <input type="password" class="form-control" id="keystone_password" ng-model="cloud.keystone_password" required />
+                    </div>
+                    <div class="form-group">
+                        <label>Keystone Tenant Name *</label>
+                        <input type="text" class="form-control" id="keystone_tenant_name" ng-model="cloud.keystone_tenant_name" required />
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label>Keystone User *</label>
-                    <input type="text" class="form-control" id="keystone_user" ng-model="cloud.keystone_user" required />
+                <!-- ./modal-body -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
                 </div>
-                <div class="form-group">
-                    <label>Keystone Password *</label>
-                    <input type="password" class="form-control" id="keystone_password" ng-model="cloud.keystone_password" required />
-                </div>
-                <div class="form-group">
-                    <label>Keystone Tenant Name *</label>
-                    <input type="text" class="form-control" id="keystone_tenant_name" ng-model="cloud.keystone_tenant_name" required />
-                </div>
-                <a href="#/cloud/" class="btn btn-default">Cancel</a>
-                <button type="button" class="btn btn-primary" ng-click="save()">Save</button>
-                <!-- <button type="button" class="btn btn-primary" ng-click="saveAndDiscover()">Save & Start Discovery</button> -->
             </form>
         </div>
+        <!-- ./modal-content -->
     </div>
+    <!-- ./modal-dialog -->
 </div>
+<!-- ./modal -->
