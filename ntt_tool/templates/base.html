@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="{% static 'css/font-awesome.css' %}">
     <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
     <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+    <link rel="stylesheet" href="{% static 'css/ngToast.css' %}">
+    <link rel="stylesheet" href="{% static 'css/ngToast-animations.min.css' %}">
     {% block css %}{% endblock %}
 
     <script type="text/javascript" src="{% static 'js/libs/jquery-2.2.0.min.js' %}"></script>
@@ -15,7 +17,10 @@
     <script type="text/javascript" src="{% static 'js/libs/angular/ui-bootstrap-tpls-1.2.4.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/libs/angular/angular-cookies.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/libs/angular/angular-route.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/libs/angular/angular-sanitize.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/libs/angular/angular-animate.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/libs/angular/checklist-model.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/libs/angular/ngtoast/ngToast.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/apps/app.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/apps/interceptors/http-auth-interceptor.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/apps/auth.js' %}"></script>
@@ -33,5 +38,6 @@
 </head>
 <body>
     <div ng-view></div>
+    <toast></toast>
 </body>
 </html>

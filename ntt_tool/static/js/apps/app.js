@@ -1,8 +1,11 @@
 var nttApp = angular.module('nttApp', [
     'ngRoute',
     'ngCookies',
+    'ngAnimate',
+    'ngSanitize',
     'http-auth-interceptor',
     'ui.bootstrap',
+    'ngToast',
     'checklist-model',
 ]);
 
@@ -52,6 +55,8 @@ nttApp.config(['$routeProvider', function($routeProvider){
         controller: 'TrafficViewCtrl',
         templateUrl: '/static/partials/cloud/traffic/traffic_view.html'
     });
+
+
 }]);
 
 

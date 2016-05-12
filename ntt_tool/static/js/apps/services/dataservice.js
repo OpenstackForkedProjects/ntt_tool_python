@@ -7,8 +7,9 @@ nttApp.service('dataService', ['$http', '$q', function ($http, $q) {
         request.success(function (data, status, headers, config) {
             deferred.resolve(data);
         });
-        request.error(function (data, status) {
-            deferred.reject(data);
+        request.error(function (err, status) {
+            var error = {"status": status, "error": err};
+            deferred.reject(error);
         });
         return deferred.promise;
     };
@@ -23,8 +24,9 @@ nttApp.service('dataService', ['$http', '$q', function ($http, $q) {
         request.success(function (data, status, headers, config) {
             deferred.resolve(data)
         });
-        request.error(function (response) {
-            deferred.reject(response);
+        request.error(function (err, status) {
+            var error = {"status": status, "error": err};
+            deferred.reject(error);
         });
         return deferred.promise;
     };
@@ -42,8 +44,9 @@ nttApp.service('dataService', ['$http', '$q', function ($http, $q) {
         request.success(function (data, status, headers, config) {
             deferred.resolve(data)
         });
-        request.error(function (response) {
-            deferred.reject(response);
+        request.error(function (err, status) {
+            var error = {"status": status, "error": err};
+            deferred.reject(error);
         });
         return deferred.promise;
     };
@@ -62,8 +65,9 @@ nttApp.service('dataService', ['$http', '$q', function ($http, $q) {
         request.success(function (data, status, headers, config) {
             deferred.resolve(data)
         });
-        request.error(function (response) {
-            deferred.reject(response);
+          request.error(function (err, status) {
+            var error = {"status": status, "error": err};
+            deferred.reject(error);
         });
         return deferred.promise;
     };
@@ -78,8 +82,9 @@ nttApp.service('dataService', ['$http', '$q', function ($http, $q) {
         request.success(function (data, status, headers, config) {
             deferred.resolve(data)
         });
-        request.error(function (response) {
-            deferred.reject(response);
+        request.error(function (err, status) {
+            var error = {"status": status, "error": err};
+            deferred.reject(error);
         });
         return deferred.promise;
     };
@@ -93,8 +98,9 @@ nttApp.service('dataService', ['$http', '$q', function ($http, $q) {
         request.success(function (data, status, headers, config) {
             deferred.resolve(data)
         });
-        request.error(function (response) {
-            deferred.reject(response);
+        request.error(function (err, status) {
+            var error = {"status": status, "error": err};
+            deferred.reject(error);
         });
         return deferred.promise;
     };
@@ -105,8 +111,9 @@ nttApp.service('dataService', ['$http', '$q', function ($http, $q) {
         request.success(function (data, status, headers, config) {
             deferred.resolve(data)
         });
-        request.error(function (response) {
-            deferred.reject(response);
+        request.error(function (err, status) {
+            var error = {"status": status, "error": err};
+            deferred.reject(error);
         });
         return deferred.promise;
     }

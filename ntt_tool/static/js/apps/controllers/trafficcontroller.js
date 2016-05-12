@@ -1,4 +1,4 @@
-nttApp.controller('TrafficListCtrl', function($scope, $routeParams, trafficService){
+nttApp.controller('TrafficListCtrl', function($scope, $routeParams, ngToast, trafficService){
     $scope.cloudId = $routeParams.id;
     $scope.trafficList = [];
     trafficService.list($scope.cloudId).then(function(response){
@@ -7,9 +7,20 @@ nttApp.controller('TrafficListCtrl', function($scope, $routeParams, trafficServi
 
     $scope.delete = function($index){
         if (confirm("Are you sure want to delete?")){
-            trafficService.delete($scope.trafficList[$index].id).then(function(response){
-                $scope.trafficList.splice($index, 1);
-            });
+            var trafficName = $scope.trafficList[$index].name;
+            trafficService.delete($scope.trafficList[$index].id).then(
+                function(response){
+                    $scope.trafficList.splice($index, 1);
+                    ngToast.create("<b>" + trafficName + "</b> cloud traffic deleted successfully.");
+                },
+                function(error) {
+                    console.log(error);
+                    ngToast.create({
+                        className: 'danger',
+                        content: "Errors while deleting cloud traffic <b>" + trafficName + ".</b>"
+                    });
+                }
+            );
         }
     };
 
@@ -42,16 +53,36 @@ nttApp.controller('TrafficListCtrl', function($scope, $routeParams, trafficServi
         trafficObj["test_method"] = selectedTestMethods.join();
 
         if($scope.eventType == "add") {
-            trafficService.create(trafficObj).then(function (response) {
-                $scope.trafficList.push(response);
-                $("#trafficFormModal").modal('hide');
-            });
+            trafficService.create(trafficObj).then(
+                function (response) {
+                    $scope.trafficList.push(response);
+                    ngToast.create("<b>" + response.name + "</b> cloud traffic created successfully.");
+                    $("#trafficFormModal").modal('hide');
+                },
+                function(error) {
+                    console.log(error);
+                    ngToast.create({
+                        className: 'danger',
+                        content: "Errors while creating cloud traffic <b>" + trafficObj.name + ".</b>"
+                    });
+                }
+            );
         }
         else {
-            trafficService.update(trafficObj.id, trafficObj).then(function(response){
-                $scope.trafficList[$scope.traffic.$index] = response;
-                $("#trafficFormModal").modal('hide');
-            });
+            trafficService.update(trafficObj.id, trafficObj).then(
+                function(response){
+                    $scope.trafficList[$scope.traffic.$index] = response;
+                    ngToast.create("<b>" + response.name + "</b> cloud traffic updated successfully.");
+                    $("#trafficFormModal").modal('hide');
+                },
+                function(error) {
+                    console.log(error);
+                    ngToast.create({
+                        className: 'danger',
+                        content: "Errors while updating cloud traffic <b>" + trafficObj.name + ".</b>"
+                    });
+                }
+            );
         }
     }
 });

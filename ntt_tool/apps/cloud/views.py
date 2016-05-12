@@ -16,7 +16,7 @@ from openstackscripts.credentials import *
 from openstackscripts.endpoints import DiscoverEndpoints, LaunchEndpoints
 from openstackscripts.traffictest.traffictest import TrafficTest
 
-
+from rest_framework import status
 import os
 import pickle
 from django.core.mail import EmailMessage

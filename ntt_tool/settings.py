@@ -147,10 +147,12 @@ REST_FRAMEWORK = {
 }
 
 JWT_AUTH = {
+    'JWT_RESPONSE_PAYLOAD_HANDLER': 'ntt_tool.apps.user.jwtutils.jwt_response_payload_handler',
     'JWT_EXPIRATION_DELTA': datetime.timedelta(days=10),
     'JWT_ALLOW_REFRESH': True,
-    'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=10)
+    'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=10),
 }
+# JWT_RESPONSE_PAYLOAD_HANDLER = 'ntt_tool.apps.user.jwtutils.jwt_response_payload_handler',
 
 # LOGIN_REDIRECT_URL = '/api/profile/'
 

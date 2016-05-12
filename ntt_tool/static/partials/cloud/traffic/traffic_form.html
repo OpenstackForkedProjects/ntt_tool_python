@@ -4,10 +4,9 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="trafficFormModalLabel">{$ eventType $} Traffic</h4>
+                <h4 class="modal-title" id="trafficFormModalLabel">{$ eventType | capitalize:true $} Traffic</h4>
             </div>
             <div class="modal-body">
-                <pre>{$ traffic $}</pre>
                 <form name="cloudTrafficForm">
                     <div class="col-md-6">
                         <div class="form-group">
