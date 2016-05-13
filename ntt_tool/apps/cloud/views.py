@@ -9,6 +9,8 @@ from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from ntt_tool.utils.reportutils import render_to_pdf
 from serializers import *
 
+from keystoneclient import exceptions
+
 from openstackscripts.keystoneclientutils import KeystoneClientUtils
 from openstackscripts.neutronclientutils import NeutronClientUtils
 from openstackscripts.tenantnetworkdiscovery import *
@@ -17,10 +19,7 @@ from openstackscripts.endpoints import DiscoverEndpoints, LaunchEndpoints
 from openstackscripts.traffictest.traffictest import TrafficTest
 
 from rest_framework import status
-import os
-import pickle
 from django.core.mail import EmailMessage
-from email.mime.text import MIMEText
 from django.conf import settings
 
 
@@ -167,7 +166,12 @@ class TenantViewSet(viewsets.ModelViewSet):
     @list_route(methods=["get"], url_path="discover")
     def discover(self, request):
         cloud = Cloud.objects.get(pk=request.GET.get("cloud_id"), creator=request.user)
-        keystone_utils = KeystoneClientUtils(**get_credentials(cloud))
+        try:
+            keystone_utils = KeystoneClientUtils(**get_credentials(cloud))
+        except exceptions.Unauthorized, e:
+            return Response("Unauthorized: %s" % (e.message), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        except exceptions.AuthorizationFailure, e:
+            return Response(e.message, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         tenants_ctrl = TenantsController(request.GET.get("traffic_id"))
         tenants = tenants_ctrl.save(request.user, keystone_utils.get_tenants())
         serializer = TenantListSerializer(tenants, many=True)

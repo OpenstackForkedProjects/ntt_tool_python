@@ -87,7 +87,7 @@ nttApp.controller('TrafficListCtrl', function($scope, $routeParams, ngToast, tra
     }
 });
 
-nttApp.controller('TrafficViewCtrl', function($scope, $routeParams, trafficService, tenantService, networkService, endpointService, $http){
+nttApp.controller('TrafficViewCtrl', function($scope, $routeParams, ngToast, trafficService, tenantService, networkService, endpointService, $http){
     $scope.cloudId = $routeParams.cloudId;
     $scope.id = $routeParams.id;
     $scope.traffic = {};
@@ -118,10 +118,21 @@ nttApp.controller('TrafficViewCtrl', function($scope, $routeParams, trafficServi
     $scope.showTenantsDiscovering = false;
     $scope.discoverTenants = function () {
         $scope.showTenantsDiscovering = true;
-        tenantService.discover({"cloud_id": $scope.cloudId, "traffic_id":$scope.id}).then(function (response) {
-            $scope.showTenantsDiscovering = false;
-            $scope.tenants = response;
-        });
+        tenantService.discover({"cloud_id": $scope.cloudId, "traffic_id":$scope.id}).then(
+            function (response) {
+                $scope.showTenantsDiscovering = false;
+                $scope.tenants = response;
+                ngToast.create("Tenants has been discovered successfully.");
+            },
+            function (error) {
+                $scope.showTenantsDiscovering = false;
+                ngToast.create({
+                    className: 'danger',
+                    content: error.error,
+                    timeout: 8000,
+                });
+            }
+        );
     };
 
 
@@ -130,10 +141,21 @@ nttApp.controller('TrafficViewCtrl', function($scope, $routeParams, trafficServi
     $scope.discoverNetworks = function ($index) {
         $scope.showNetworkDiscovering = true;
         $scope.selectedTenant = $scope.tenants[$index];
-        networkService.discover($scope.selectedTenant.id).then(function (response) {
-            $scope.networks = response;
-            $scope.showNetworkDiscovering = false;
-        });
+        networkService.discover($scope.selectedTenant.id).then(
+            function (response) {
+                $scope.networks = response;
+                $scope.showNetworkDiscovering = false;
+                ngToast.create("Networks has been discovered successfully.");
+            },
+            function (error) {
+                $scope.showNetworkDiscovering = false;
+                ngToast.create({
+                    className: 'danger',
+                    content: error.error,
+                    timeout: 8000,
+                });
+            }
+        );
     };
 
     $scope.getNetworks = function (tenantId) {
@@ -172,10 +194,21 @@ nttApp.controller('TrafficViewCtrl', function($scope, $routeParams, trafficServi
                 });
             }
         });
-        endpointService.discover($scope.traffic.id, selectedNetworks).then(function (response) {
-            $scope.endpoints = response;
-            $scope.showEndpointLoading = false;
-        });
+        endpointService.discover($scope.traffic.id, selectedNetworks).then(
+            function (response) {
+                $scope.endpoints = response;
+                $scope.showEndpointLoading = false;
+                ngToast.create("Endpoints has been discovered successfully.");
+            },
+            function (error) {
+                $scope.showEndpointLoading = false;
+                ngToast.create({
+                    className: 'danger',
+                    content: error.error,
+                    timeout: 8000,
+                });
+            }
+        );
     };
 
     $scope.showEndpointLaunching = false;
@@ -190,10 +223,21 @@ nttApp.controller('TrafficViewCtrl', function($scope, $routeParams, trafficServi
                 });
             }
         });
-        endpointService.launch($scope.traffic.id, selectedNetworks).then(function (response) {
-            $scope.endpoints = response;
-            $scope.showEndpointLaunching = false;
-        });
+        endpointService.launch($scope.traffic.id, selectedNetworks).then(
+            function (response) {
+                $scope.endpoints = response;
+                $scope.showEndpointLaunching = false;
+                ngToast.create("Endpoints has been launched successfully.");
+            },
+            function (error) {
+                $scope.showEndpointLaunching = false;
+                ngToast.create({
+                    className: 'danger',
+                    content: error.error,
+                    timeout: 8000,
+                });
+            }
+        );
     };
 
     $scope.getEndpoints = function () {
@@ -234,13 +278,23 @@ nttApp.controller('TrafficViewCtrl', function($scope, $routeParams, trafficServi
     $scope.runTrafficTest = function () {
         $scope.report = {};
         $scope.trafficTestRunning = true;
-        trafficService.runTrafficTest($scope.traffic.id, $scope.trafficTestDuration).then(function (response) {
-            $scope.report = response;
-            $scope.trafficTestRunning = false;
-            $scope.reports.push($scope.report);
-            $('#trafficTestFormModal').modal('hide');
-            $('#viewReportModal').modal('show');
-        });
+        trafficService.runTrafficTest($scope.traffic.id, $scope.trafficTestDuration).then(
+            function (response) {
+                $scope.report = response;
+                $scope.trafficTestRunning = false;
+                $scope.reports.push($scope.report);
+                $('#trafficTestFormModal').modal('hide');
+                $('#viewReportModal').modal('show');
+            },
+            function (error) {
+                $scope.trafficTestRunning = false;
+                ngToast.create({
+                    className: 'danger',
+                    content: error.error,
+                    timeout: 8000,
+                });
+            }
+        );
     };
 
     $scope.showLoadingReport = false;
@@ -268,16 +322,35 @@ nttApp.controller('TrafficViewCtrl', function($scope, $routeParams, trafficServi
 
     $scope.deleteReport = function ($index, testRunId) {
         if(confirm("Are you sure want to delete?")) {
-            trafficService.deleteReport(testRunId).then(function (response) {
-                $scope.reports.splice($index, 1);
-            });
+            trafficService.deleteReport(testRunId).then(
+                function (response) {
+                    $scope.reports.splice($index, 1);
+                    ngToast.create("Test run has been deleted successfully.");
+                },
+                function (error) {
+                    ngToast.create({
+                        className: 'danger',
+                        content: error.error,
+                        timeout: 8000,
+                    });
+                }
+            );
         }
     };
 
 
     $scope.emailReport = function (testRunId) {
-        trafficService.emailReport(testRunId).then(function (response) {
-            console.log(response)
-        });
+        trafficService.emailReport(testRunId).then(
+            function (response) {
+                ngToast.create("Report has been sent to email successfully.");
+            },
+            function (error) {
+                ngToast.create({
+                    className: 'danger',
+                    content: error.error,
+                    timeout: 8000,
+                });
+            }
+        );
     }
 });
