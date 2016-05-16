@@ -134,7 +134,7 @@
                     <th class="col-md-1">Actions</th>
                 </tr>
                 <tr ng-repeat="report in reports | orderBy:'-id'">
-                    <td>{$ report.traffic_name $}_{$ report.id $}</td>
+                    <td>{$ report.report_name $}</td>
                     <td>{$ report.test_run_duration $} min</td>
                     <td>{$ report.started_on | date:'medium' $}</td>
                     <td>{$ report.completed_on | date:'medium' $}</td>
@@ -490,7 +490,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" ng-click="downloadReport(report.id, report.traffic_name)"><i class="fa fa-download fa-fw"></i> Download</button>
+                <button type="button" class="btn btn-primary" ng-click="downloadReport(report.id, report.report_name)"><i class="fa fa-download fa-fw"></i> Download</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
         </div>

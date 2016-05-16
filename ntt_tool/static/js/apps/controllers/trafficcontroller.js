@@ -307,14 +307,14 @@ nttApp.controller('TrafficViewCtrl', function($scope, $routeParams, ngToast, tra
         });
     };
     
-    $scope.downloadReport = function (testRunId, trafficName) {
+    $scope.downloadReport = function (testRunId, reportName) {
         var url = '/api/traffic/report/download/' + testRunId + '/';
         $http.post(url, {}, {responseType: 'arraybuffer'}).then(function (response) {
             var headers = response.headers();
             var blob = new Blob([response.data],{type:headers['content-type']});
             var link = document.createElement('a');
             link.href = window.URL.createObjectURL(blob);
-            link.download = trafficName+"_"+testRunId+".pdf";
+            link.download = reportName + ".pdf";
             link.click();
         });
     };
