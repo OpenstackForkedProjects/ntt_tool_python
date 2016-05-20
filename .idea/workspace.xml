@@ -2,9 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="14b1c637-e7d4-402a-92e3-fc8b86ab1bd3" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitattributes" afterPath="$PROJECT_DIR$/.gitattributes" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ntt_tool/static/js/apps/controllers/trafficcontroller.js" afterPath="$PROJECT_DIR$/ntt_tool/static/js/apps/controllers/trafficcontroller.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ntt_tool/static/partials/cloud/traffic/traffic_view.html" afterPath="$PROJECT_DIR$/ntt_tool/static/partials/cloud/traffic/traffic_view.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ntt_tool/static/partials/cloud/cloud_form.html" afterPath="$PROJECT_DIR$/ntt_tool/static/partials/cloud/cloud_form.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ntt_tool/static/partials/cloud/traffic/traffic_form.html" afterPath="$PROJECT_DIR$/ntt_tool/static/partials/cloud/traffic/traffic_form.html" />
     </list>
     <ignored path="ntt_tool.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -45,7 +46,28 @@
     <favorites_list name="ntt_tool" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
+    <leaf>
+      <file leaf-file-name="cloud_form.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ntt_tool/static/partials/cloud/cloud_form.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="147">
+              <caret line="10" column="93" selection-start-line="10" selection-start-column="43" selection-end-line="10" selection-end-column="93" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="traffic_form.html" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/ntt_tool/static/partials/cloud/traffic/traffic_form.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="837">
+              <caret line="159" column="112" selection-start-line="159" selection-start-column="112" selection-end-line="159" selection-end-column="112" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -92,7 +114,6 @@
         <option value="$PROJECT_DIR$/ntt_tool/apps/cloud/openstackscripts/traffictest/traffictest.py" />
         <option value="$PROJECT_DIR$/ntt_tool/static/css/custom.css" />
         <option value="$PROJECT_DIR$/ntt_tool/static/partials/cloud/cloud_list.html" />
-        <option value="$PROJECT_DIR$/ntt_tool/static/partials/cloud/cloud_form.html" />
         <option value="$PROJECT_DIR$/ntt_tool/static/partials/cloud/traffic/traffic_list.html" />
         <option value="$PROJECT_DIR$/ntt_tool/utils/custom_exception_handler.py" />
         <option value="$PROJECT_DIR$/ntt_tool/static/partials/index.html" />
@@ -107,13 +128,14 @@
         <option value="$PROJECT_DIR$/ntt_tool/static/js/apps/auth.js" />
         <option value="$PROJECT_DIR$/ntt_tool/static/js/apps/services/dataservice.js" />
         <option value="$PROJECT_DIR$/ntt_tool/static/partials/cloud/cloud_view.html" />
-        <option value="$PROJECT_DIR$/ntt_tool/static/partials/cloud/traffic/traffic_form.html" />
         <option value="$PROJECT_DIR$/ntt_tool/static/js/apps/controllers/cloudcontroller.js" />
         <option value="$PROJECT_DIR$/ntt_tool/apps/cloud/openstackscripts/neutronclientutils.py" />
         <option value="$PROJECT_DIR$/ntt_tool/apps/cloud/views.py" />
         <option value="$PROJECT_DIR$/ntt_tool/apps/cloud/openstackscripts/traffictest/libs/traf_tester.py" />
         <option value="$PROJECT_DIR$/ntt_tool/static/partials/cloud/traffic/traffic_view.html" />
         <option value="$PROJECT_DIR$/ntt_tool/static/js/apps/controllers/trafficcontroller.js" />
+        <option value="$PROJECT_DIR$/ntt_tool/static/partials/cloud/cloud_form.html" />
+        <option value="$PROJECT_DIR$/ntt_tool/static/partials/cloud/traffic/traffic_form.html" />
       </list>
     </option>
   </component>
@@ -909,7 +931,7 @@
     <frame x="65" y="24" width="1855" height="1056" extended-state="6" />
     <editor active="false" />
     <layout>
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21779989" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2233278" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.22482197" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.328125" sideWeight="0.50278443" order="9" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3293556" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1031,13 +1053,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ntt_tool/static/partials/cloud/cloud_form.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="10" column="44" selection-start-line="10" selection-start-column="44" selection-end-line="10" selection-end-column="44" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/ntt_tool/static/partials/cloud/cloud_list.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="210">
@@ -1049,7 +1064,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="504">
           <caret line="24" column="92" selection-start-line="24" selection-start-column="92" selection-end-line="24" selection-end-column="92" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1064,9 +1078,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#42#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1074,7 +1085,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="420">
           <caret line="23" column="30" selection-start-line="23" selection-start-column="30" selection-end-line="23" selection-end-column="30" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1082,7 +1092,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="102">
           <caret line="9" column="53" selection-start-line="9" selection-start-column="53" selection-end-line="9" selection-end-column="53" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1097,7 +1106,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-446">
           <caret line="56" column="4" selection-start-line="56" selection-start-column="4" selection-end-line="56" selection-end-column="4" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1141,9 +1149,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1281">
           <caret line="61" column="56" selection-start-line="61" selection-start-column="28" selection-end-line="61" selection-end-column="56" />
-          <folding>
-            <element signature="e#0#40#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1165,7 +1170,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="63">
           <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1173,7 +1177,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1181,7 +1184,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="168">
           <caret line="8" column="33" selection-start-line="8" selection-start-column="33" selection-end-line="8" selection-end-column="33" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1196,7 +1198,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="504">
           <caret line="28" column="0" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1232,15 +1233,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="336">
           <caret line="16" column="0" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ntt_tool/static/partials/cloud/traffic/traffic_form.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="336">
-          <caret line="16" column="42" selection-start-line="16" selection-start-column="42" selection-end-line="16" selection-end-column="42" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1248,7 +1240,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1134">
           <caret line="54" column="14" selection-start-line="45" selection-start-column="12" selection-end-line="54" selection-end-column="14" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1270,7 +1261,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1278,7 +1268,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1286,7 +1275,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1294,7 +1282,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="357">
           <caret line="17" column="31" selection-start-line="17" selection-start-column="18" selection-end-line="17" selection-end-column="31" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1302,9 +1289,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="819">
           <caret line="41" column="62" selection-start-line="41" selection-start-column="62" selection-end-line="41" selection-end-column="62" />
-          <folding>
-            <element signature="e#977#991#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1312,7 +1296,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1722">
           <caret line="87" column="25" selection-start-line="87" selection-start-column="25" selection-end-line="87" selection-end-column="25" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1320,7 +1303,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="741">
           <caret line="98" column="16" selection-start-line="98" selection-start-column="4" selection-end-line="98" selection-end-column="16" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1328,9 +1310,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="311">
           <caret line="95" column="35" selection-start-line="95" selection-start-column="35" selection-end-line="95" selection-end-column="35" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1338,7 +1317,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="499">
           <caret line="133" column="10" selection-start-line="133" selection-start-column="4" selection-end-line="133" selection-end-column="15" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1346,7 +1324,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="384">
           <caret line="309" column="25" selection-start-line="309" selection-start-column="11" selection-end-line="309" selection-end-column="25" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1354,7 +1331,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="6644">
           <caret line="492" column="111" selection-start-line="492" selection-start-column="111" selection-end-line="492" selection-end-column="111" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1362,7 +1338,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="441">
           <caret line="26" column="0" selection-start-line="26" selection-start-column="0" selection-end-line="26" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1370,6 +1345,21 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1014">
           <caret line="340" column="24" selection-start-line="340" selection-start-column="24" selection-end-line="340" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ntt_tool/static/partials/cloud/cloud_form.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="147">
+          <caret line="10" column="93" selection-start-line="10" selection-start-column="43" selection-end-line="10" selection-end-column="93" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ntt_tool/static/partials/cloud/traffic/traffic_form.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="837">
+          <caret line="159" column="112" selection-start-line="159" selection-start-column="112" selection-end-line="159" selection-end-column="112" />
           <folding />
         </state>
       </provider>

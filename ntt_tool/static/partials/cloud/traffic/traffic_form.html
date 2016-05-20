@@ -8,126 +8,152 @@
             </div>
             <div class="modal-body">
                 <form name="cloudTrafficForm">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label>Name</label><span> * </span>
-                            <input type="text" class="form-control" id="name" ng-model="traffic.name" required>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label>Test Environment</label>
-                            <select class="form-control" ng-model="traffic.test_environment">
-                                <option value="dev">Dev/Testing</option>
-                                <option value="prod">Production</option>
-                             </select>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label>Remote Username</label>
-                            <input type="text" class="form-control" id="remote_user" ng-model="traffic.remote_user" required>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label>Remote Password</label>
-                            <input type="password" class="form-control" id="remote_pass" ng-model="traffic.remote_pass" required>
-                        </div>
-                    </div>
-
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label>Allowed Delta Percentage</label>
-                            <div class="input-group">
-                                <input type="number" class="form-control" id="allowed_delta_percentage"
-                                       min="1"
-                                       ng-model="traffic.allowed_delta_percentage"
-                                       aria-describedby="allowed-delta-percentage"
+                    <div class="row">
+                        <div class="col-md-6" ng-class="{'has-error': cloudTrafficForm.name.$invalid}">
+                            <div class="form-group">
+                                <label>Name</label><span> * </span>
+                                <input type="text" class="form-control" id="name" name="name"
+                                       ng-model="traffic.name"
+                                       ng-minlength="2"
+                                       ng-maxlength="50"
                                        required />
-                                <span class="input-group-addon" id="allowed-delta-percentage">%</span>
+                                <span class="help-block" ng-show="cloudTrafficForm.name.$error.minlength || cloudTrafficForm.name.$error.maxlength">Please enter name between 2 to 50 characters.</span>
+                                <span class="help-block" ng-show="cloudTrafficForm.name.$error.required">Name is required.</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Test Environment</label>
+                                <select class="form-control" ng-model="traffic.test_environment">
+                                    <option value="dev">Dev/Testing</option>
+                                    <option value="prod">Production</option>
+                                 </select>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label>IPERF Duration</label>
-                            <div class="input-group">
-                                <input type="number" class="form-control" id="iperf_duration"
+
+                    <div class="row">
+                        <div class="col-md-6" ng-class="{'has-error': cloudTrafficForm.remote_user.$invalid}">
+                            <div class="form-group">
+                                <label>Remote Username *</label>
+                                <input type="text" class="form-control" id="remote_user" name="remote_user" ng-model="traffic.remote_user" required>
+                                <span class="help-block" ng-show="cloudTrafficForm.remote_user.$error.required">Remote username is required.</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6" ng-class="{'has-error': cloudTrafficForm.remote_pass.$invalid}">
+                            <div class="form-group">
+                                <label>Remote Password *</label>
+                                <input type="password" class="form-control" id="remote_pass" name="remote_pass" ng-model="traffic.remote_pass" required>
+                                <span class="help-block" ng-show="cloudTrafficForm.remote_pass.$error.required">Remote password is required.</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6" ng-class="{'has-error': cloudTrafficForm.allowed_delta_percentage.$invalid}">
+                            <div class="form-group">
+                                <label>Allowed Delta Percentage *</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="allowed_delta_percentage"
+                                           name="allowed_delta_percentage"
+                                           min="1"
+                                           ng-model="traffic.allowed_delta_percentage"
+                                           aria-describedby="allowed-delta-percentage"
+                                           required />
+                                    <span class="input-group-addon" id="allowed-delta-percentage">%</span>
+                                </div>
+                                <span class="help-block" ng-show="cloudTrafficForm.allowed_delta_percentage.$error.required">Allowed delta percentage is required.</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6" ng-class="{'has-error': cloudTrafficForm.iperf_duration.$invalid}">
+                            <div class="form-group">
+                                <label>IPERF Duration *</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="iperf_duration" name="iperf_duration"
+                                           min="1"
+                                           ng-model="traffic.iperf_duration"
+                                           aria-describedby="iperf-duration"
+                                           required />
+                                    <span class="input-group-addon" id="iperf-duration">sec</span>
+                                </div>
+                                <span class="help-block" ng-show="cloudTrafficForm.iperf_duration.$error.required">IPERF duration is required.</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6" ng-class="{'has-error': cloudTrafficForm.number_of_workers.$invalid}">
+                            <div class="form-group">
+                                <label>Number Of Workers *</label>
+                                <input type="number" class="form-control" id="number_of_workers" name="number_of_workers"
                                        min="1"
-                                       ng-model="traffic.iperf_duration"
-                                       aria-describedby="iperf-duration"
+                                       ng-model="traffic.number_of_workers"
                                        required />
-                                <span class="input-group-addon" id="iperf-duration">sec</span>
+                                <span class="help-block" ng-show="cloudTrafficForm.number_of_workers.$error.required">Number of worker is required.</span>
+                                <span class="help-block" ng-show="cloudTrafficForm.number_of_workers.$error.min">Number of workers should be greater than or equal to 1.</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6" ng-class="{'has-error': cloudTrafficForm.number_of_workers.$invalid}">
+                            <div class="form-group">
+                                <label>Test Result Path *</label>
+                                <input type="text" class="form-control" id="test_result_path" name="test_result_path" ng-model="traffic.test_result_path" required>
+                                <span class="help-block" ng-show="cloudTrafficForm.test_result_path.$error.required">Test result path is required.</span>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label>Number Of Workers</label>
-                            <input type="number" class="form-control" id="number_of_workers"
-                                   min="1"
-                                   ng-model="traffic.number_of_workers"
-                                   required />
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Test Method</label>
+                                <br>
+                                <div class="btn-group btn-group-justified">
+                                    <label class="btn btn-default" ng-model="traffic.test_method.icmp" uib-btn-checkbox>ICMP</label>
+                                    <label class="btn btn-default" ng-model="traffic.test_method.tcp" uib-btn-checkbox>TCP</label>
+                                    <label class="btn btn-default" ng-model="traffic.test_method.udp" uib-btn-checkbox>UDP</label>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label>Test Result Path</label>
-                            <input type="text" class="form-control" id="test_result_path" ng-model="traffic.test_result_path" required>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label>Test Method</label>
-                            <br>
-                            <div class="btn-group btn-group-justified">
-                                <label class="btn btn-default" ng-model="traffic.test_method.icmp" uib-btn-checkbox>ICMP</label>
-                                <label class="btn btn-default" ng-model="traffic.test_method.tcp" uib-btn-checkbox>TCP</label>
-                                <label class="btn btn-default" ng-model="traffic.test_method.udp" uib-btn-checkbox>UDP</label>
+                        <div class="col-md-6" ng-class="{'has-error': cloudTrafficForm.udp_datagram_size.$invalid}">
+                            <div class="form-group">
+                                <label>UDP Datagram Size</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="udp_datagram_size" name="udp_datagram_size"
+                                           min="1"
+                                           ng-model="traffic.udp_datagram_size"
+                                           ng-required="traffic.test_method.udp"
+                                           ng-disabled="!traffic.test_method.udp"/>
+                                    <span class="input-group-addon">Mb</span>
+                                </div>
+                                <span class="help-block" ng-show="cloudTrafficForm.udp_datagram_size.$error.required">UDP datagram size is required.</span>
+                                <span class="help-block" ng-show="cloudTrafficForm.udp_datagram_size.$error.min">UDP datagram size should be greater than or equal to 1.</span>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label>UDP Datagram Size</label>
-                            <div class="input-group">
-                                <input type="number" class="form-control" id="udp_datagram_size"
-                                       min="1"
-                                       ng-model="traffic.udp_datagram_size"
-                                       ng-required="traffic.test_method.udp"
-                                       ng-disabled="!traffic.test_method.udp"/>
-                                <span class="input-group-addon">Mb</span>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Tenant Type</label>
+                                <!-- Todo: Enable when other features are developed -->
+                                <select class="form-control" ng-model="traffic.test_type" ng-disabled="true">
+                                    <option value="all">All</option>
+                                    <option value="intra-tenant">Intra Tenant</option>
+                                    <option value="inter-tenant">Inter Tenant</option>
+                                    <option value="south-north">South to North</option>
+                                    <option value="north-south">North to South</option>
+                                 </select>
                             </div>
-
+                        </div>
+                        <div class="col-md-6" ng-class="{'has-error': cloudTrafficForm.ssh_gateway.$invalid}">
+                            <div class="form-group">
+                                <label>SSH Gateway *</label>
+                                <input type="text" class="form-control" id="ssh_gateway" name="ssh_gateway" ng-model="traffic.ssh_gateway" required>
+                                <span class="help-block" ng-show="cloudTrafficForm.ssh_gateway.$error.required">SSH gateway is required.</span>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label>Tenant Type</label>
-                            <!-- Todo: Enable when other features are developed -->
-                            <select class="form-control" ng-model="traffic.test_type" ng-disabled="true">
-                                <option value="all">All</option>
-                                <option value="intra-tenant">Intra Tenant</option>
-                                <option value="inter-tenant">Inter Tenant</option>
-                                <option value="south-north">South to North</option>
-                                <option value="north-south">North to South</option>
-                             </select>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label>SSH Gateway</label>
-                            <input type="text" class="form-control" id="ssh_gateway" ng-model="traffic.ssh_gateway" required>
-                        </div>
-                    </div>
-
-
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary" ng-click="save()">Save</button>
+                <button type="submit" class="btn btn-primary" ng-click="save()" ng-disabled="cloudTrafficForm.$invalid">Save</button>
             </div>
         </div>
     </div>

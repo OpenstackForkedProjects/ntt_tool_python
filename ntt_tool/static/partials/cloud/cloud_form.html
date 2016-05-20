@@ -8,31 +8,44 @@
                     <h4 class="modal-title" id="trafficFormModalLabel">{$ eventType | capitalize:true $} Cloud</h4>
                 </div>
                 <div class="modal-body">
-                    <div class="form-group">
+                    <div class="form-group" ng-class="{'has-error': cloudForm.name.$invalid}">
                         <label>Name *</label>
-                        <input type="text" class="form-control" id="name" ng-model="cloud.name" required />
+                        <input type="text" class="form-control" id="name" name="name"
+                               ng-model="cloud.name"
+                               ng-minlength="2"
+                               ng-maxlength="50"
+                               required />
+                        <span class="help-block" ng-show="cloudForm.name.$error.minlength || cloudForm.name.$error.maxlength">Please enter name between 2 to 50 characters.</span>
+                        <span class="help-block" ng-show="cloudForm.name.$error.required">Name is required.</span>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" ng-class="{'has-error': cloudForm.keystone_auth_url.$invalid}">
                         <label>Keystone Auth URL *</label>
-                        <input type="url" class="form-control" id="keystone_auth_url" ng-model="cloud.keystone_auth_url" required />
+                        <input type="url" class="form-control" id="keystone_auth_url" name="keystone_auth_url"
+                               ng-model="cloud.keystone_auth_url"
+                               required />
+                        <span class="help-block" ng-show="cloudForm.keystone_auth_url.$error.url">Please enter a valid keystone auth url.</span>
+                        <span class="help-block" ng-show="cloudForm.keystone_auth_url.$error.required">Keystone auth url is required.</span>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" ng-class="{'has-error': cloudForm.keystone_user.$invalid}">
                         <label>Keystone User *</label>
-                        <input type="text" class="form-control" id="keystone_user" ng-model="cloud.keystone_user" required />
+                        <input type="text" class="form-control" id="keystone_user" name="keystone_user" ng-model="cloud.keystone_user" required />
+                        <span class="help-block" ng-show="cloudForm.keystone_user.$error.required">Keystone username is required.</span>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" ng-class="{'has-error': cloudForm.keystone_password.$invalid}">
                         <label>Keystone Password *</label>
-                        <input type="password" class="form-control" id="keystone_password" ng-model="cloud.keystone_password" required />
+                        <input type="password" class="form-control" id="keystone_password" name="keystone_password" ng-model="cloud.keystone_password" required />
+                        <span class="help-block" ng-show="cloudForm.keystone_password.$error.required">Keystone password is required.</span>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" ng-class="{'has-error': cloudForm.keystone_tenant_name.$invalid}">
                         <label>Keystone Tenant Name *</label>
-                        <input type="text" class="form-control" id="keystone_tenant_name" ng-model="cloud.keystone_tenant_name" required />
+                        <input type="text" class="form-control" id="keystone_tenant_name" name="keystone_tenant_name" ng-model="cloud.keystone_tenant_name" required />
+                        <span class="help-block" ng-show="cloudForm.keystone_tenant_name.$error.required">Keystone tenant name is required.</span>
                     </div>
                 </div>
                 <!-- ./modal-body -->
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="submit" class="btn btn-primary" ng-disabled="cloudForm.$invalid">Save</button>
                 </div>
             </form>
         </div>
