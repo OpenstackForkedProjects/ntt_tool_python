@@ -42,11 +42,11 @@ def install_hping(environment):
             if os_info in ['CentOS',
                            'Red Hat Enterprise Linux Server',
                            'Fedora']:
-                out = sudo("yum -y install hping3")
+                out = sudo("yum -y install hping3", quiet=True)
                 if out.return_code == 0:
                     logger.info("Installed hping3 on %s" % (env.host_string))
             elif os_info in ['Ubuntu','LinuxMint']:
-                out = sudo("apt-get -y install hping3")
+                out = sudo("apt-get -y install hping3", quiet=True)
                 if out.return_code == 0:
                     logger.info("Installed hping3 on %s" % (env.host_string))
         out = run("mkdir %s" % (test_results_path))

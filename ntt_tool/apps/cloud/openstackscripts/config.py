@@ -5,7 +5,7 @@ from django.conf import settings
 NOVA_FLOATING_IP_CREATION = True
 NOVA_FLOATING_IP_POOL = 'public'
 
-NOVA_IMAGE_NAME = "ubuntu"
+NOVA_IMAGE_NAME = "trafficimage"
 
 NOVA_QUOTA_INSTANCES = -1
 NOVA_QUOTA_CORES = -1
